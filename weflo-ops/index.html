@@ -1,0 +1,1314 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WEFLO 사업개발 실행 콘솔</title>
+</head>
+<body>
+<style>
+:root{
+  --bg:#F3F6F8; --surface:#FFFFFF; --surface-2:#EDF1F4; --surface-3:#E4EAEF;
+  --ink:#15202B; --ink-2:#47576A; --ink-3:#7A8A9B;
+  --line:#DCE3EA; --line-2:#CBD5DE;
+  --accent:#0E8F93; --accent-ink:#0B6E72; --accent-soft:#E0F0F0;
+  --amber:#B67608; --amber-soft:#F7ECD4;
+  --good:#2C8A62; --good-soft:#DFF0E7;
+  --warn:#B8730F; --warn-soft:#F7EAD3;
+  --crit:#B24A34; --crit-soft:#F4E1DB;
+  --shadow:0 1px 2px rgba(20,32,43,.05),0 6px 18px rgba(20,32,43,.06);
+  --radius:12px; --radius-s:8px;
+  --sans:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:"SF Mono","JetBrains Mono","D2Coding",ui-monospace,"Consolas","Courier New",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0C131B; --surface:#131E29; --surface-2:#1A2735; --surface-3:#223141;
+    --ink:#E8EFF5; --ink-2:#A2B2C2; --ink-3:#6F8193;
+    --line:#243140; --line-2:#2F3E4E;
+    --accent:#2CB5BA; --accent-ink:#5BD0D4; --accent-soft:#123138;
+    --amber:#E0A83E; --amber-soft:#2E2612;
+    --good:#4FC08D; --good-soft:#123326;
+    --warn:#E0A83E; --warn-soft:#2E2612;
+    --crit:#E08163; --crit-soft:#331B14;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F3F6F8; --surface:#FFFFFF; --surface-2:#EDF1F4; --surface-3:#E4EAEF;
+  --ink:#15202B; --ink-2:#47576A; --ink-3:#7A8A9B;
+  --line:#DCE3EA; --line-2:#CBD5DE;
+  --accent:#0E8F93; --accent-ink:#0B6E72; --accent-soft:#E0F0F0;
+  --amber:#B67608; --amber-soft:#F7ECD4;
+  --good:#2C8A62; --good-soft:#DFF0E7; --warn:#B8730F; --warn-soft:#F7EAD3;
+  --crit:#B24A34; --crit-soft:#F4E1DB;
+  --shadow:0 1px 2px rgba(20,32,43,.05),0 6px 18px rgba(20,32,43,.06);
+}
+:root[data-theme="dark"]{
+  --bg:#0C131B; --surface:#131E29; --surface-2:#1A2735; --surface-3:#223141;
+  --ink:#E8EFF5; --ink-2:#A2B2C2; --ink-3:#6F8193;
+  --line:#243140; --line-2:#2F3E4E;
+  --accent:#2CB5BA; --accent-ink:#5BD0D4; --accent-soft:#123138;
+  --amber:#E0A83E; --amber-soft:#2E2612;
+  --good:#4FC08D; --good-soft:#123326; --warn:#E0A83E; --warn-soft:#2E2612;
+  --crit:#E08163; --crit-soft:#331B14;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+  font-size:15px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3,h4{margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--accent-ink);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit;cursor:pointer}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+
+/* Header */
+header.top{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--surface) 88%,transparent);
+  backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:16px;padding:12px 20px;max-width:1160px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.logo{width:34px;height:34px;border-radius:9px;flex:none;background:
+  radial-gradient(circle at 50% 32%,var(--accent) 0 22%,transparent 23%),
+  linear-gradient(180deg,var(--accent-ink),var(--accent));position:relative;box-shadow:var(--shadow)}
+.logo::after{content:"";position:absolute;inset:0;border-radius:9px;
+  background:conic-gradient(from 0deg,transparent 0 78%,rgba(255,255,255,.35) 82% 88%,transparent 92%)}
+.brand .bt{font-weight:800;letter-spacing:.02em;font-size:15.5px;line-height:1.1}
+.brand .bs{font-size:11.5px;color:var(--ink-3);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spacer{flex:1}
+.hdr-meta{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:11px;color:var(--ink-3);text-align:right}
+.hdr-meta .mono{font-size:11.5px;color:var(--ink-2)}
+.tgl{border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);border-radius:9px;
+  width:38px;height:34px;display:grid;place-items:center;font-size:15px}
+.tgl:hover{border-color:var(--accent);color:var(--accent-ink)}
+
+/* Tabs */
+nav.tabs{position:sticky;top:59px;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.tabs-in{display:flex;gap:2px;max-width:1160px;margin:0 auto;padding:0 12px;overflow-x:auto;scrollbar-width:none}
+.tabs-in::-webkit-scrollbar{display:none}
+.tab{appearance:none;border:0;background:transparent;color:var(--ink-2);padding:13px 14px 11px;
+  font-size:13.5px;font-weight:600;white-space:nowrap;border-bottom:2px solid transparent;letter-spacing:.01em}
+.tab .n{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-right:6px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--accent-ink);border-bottom-color:var(--accent)}
+.tab[aria-selected="true"] .n{color:var(--accent)}
+
+main{padding:26px 0 60px}
+section.panel{display:none;animation:fade .35s ease}
+section.panel.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);font-weight:600}
+.ptitle{font-size:23px;margin:6px 0 3px;letter-spacing:-.02em}
+.psub{color:var(--ink-2);font-size:14px;max-width:70ch}
+.sec-head{margin:34px 0 14px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sec-head h3{font-size:16px}
+.sec-head .rule{flex:1;height:1px;background:var(--line);min-width:20px}
+.sec-head .tag{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+
+/* Cards & grids */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.grid{display:grid;gap:14px}
+.g-hero{grid-template-columns:1.4fr 1fr}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:820px){.g-hero,.g3,.g4,.g2{grid-template-columns:1fr}.g4.keep2,.g3.keep2{grid-template-columns:1fr 1fr}}
+
+/* Overview */
+.hero{padding:22px 22px 20px}
+.hero h2{font-size:19px;letter-spacing:-.02em}
+.hero .co{color:var(--ink-2);font-size:13.5px;margin-top:8px;line-height:1.6}
+.hero .co b{color:var(--ink);font-weight:700}
+.metric{padding:16px 16px 15px;display:flex;flex-direction:column;gap:3px}
+.metric .k{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-3);text-transform:uppercase}
+.metric .v{font-family:var(--mono);font-size:27px;font-weight:700;letter-spacing:-.02em;line-height:1.05}
+.metric .d{font-size:12px;color:var(--ink-2)}
+.metric.acc .v{color:var(--accent-ink)}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+.chip{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line);white-space:nowrap}
+.chip.on{background:var(--accent-soft);color:var(--accent-ink);border-color:transparent;font-weight:600}
+.gap{padding:16px;display:flex;flex-direction:column;gap:7px}
+.gap .lab{display:flex;align-items:center;gap:8px}
+.gap .badge{font-family:var(--mono);font-size:12px;font-weight:700;width:22px;height:22px;border-radius:6px;
+  display:grid;place-items:center;background:var(--amber-soft);color:var(--amber);flex:none}
+.gap h4{font-size:14px}
+.gap p{font-size:12.5px;color:var(--ink-2)}
+
+/* KPI */
+.kpi{padding:15px 16px}
+.kpi .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+.kpi .lb{font-size:13px;font-weight:600}
+.kpi .gv{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--accent-ink)}
+.kpi .bar{height:7px;border-radius:5px;background:var(--surface-3);overflow:hidden;margin:8px 0 7px}
+.kpi .bar>i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent),var(--accent-ink))}
+.kpi .why{font-size:11.5px;color:var(--ink-3);line-height:1.5}
+.role{padding:13px 15px;display:flex;gap:11px;align-items:flex-start}
+.role .rn{font-family:var(--mono);font-weight:700;color:var(--accent-ink);font-size:13px;flex:none;width:20px}
+.role h4{font-size:13.5px;margin-bottom:2px}
+.role p{font-size:12px;color:var(--ink-2)}
+
+/* Pipeline */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0 4px}
+.fbtn{border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);border-radius:999px;
+  padding:6px 13px;font-size:12.5px;font-weight:600}
+.fbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fbtn.star[aria-pressed="true"]{background:var(--amber);border-color:var(--amber);color:#fff}
+.fcount{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--ink-3)}
+.board{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:13px;margin-top:8px}
+.tk{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 15px;
+  display:flex;flex-direction:column;gap:9px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.tk::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--line-2)}
+.tk.p5::before{background:var(--amber)} .tk.p4::before{background:var(--accent)}
+.tk.p3::before{background:var(--ink-3)} .tk.p2::before{background:var(--line-2)}
+.tk .r1{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.tk .dept{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--ink-3);text-transform:uppercase}
+.tk .stars{font-family:var(--mono);font-size:12px;letter-spacing:1px;color:var(--amber);white-space:nowrap}
+.tk .stars .off{color:var(--line-2)}
+.tk h4{font-size:14.5px;letter-spacing:-.01em;line-height:1.35}
+.tk .act{font-size:12.5px;color:var(--ink-2);line-height:1.55}
+.tk .st{align-self:flex-start;font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;margin-top:2px}
+.st.active{background:var(--good-soft);color:var(--good)}
+.st.new{background:var(--surface-2);color:var(--ink-3)}
+.st.review{background:var(--amber-soft);color:var(--amber)}
+.top5note{font-size:12px;color:var(--ink-2);background:var(--accent-soft);border:1px solid transparent;
+  border-radius:10px;padding:11px 14px;margin-top:4px}
+.top5note b{color:var(--accent-ink)}
+
+/* Calendar */
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);margin:2px 0 16px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:9px;height:9px;border-radius:3px;display:inline-block}
+.dot.conf{background:var(--accent)} .dot.pred{background:var(--line-2);border:1px dashed var(--ink-3)}
+.dot.now{background:var(--crit)}
+.cal{display:flex;flex-direction:column;gap:0}
+.mgroup{display:grid;grid-template-columns:64px 1fr;gap:0;border-top:1px solid var(--line)}
+.mgroup:last-child{border-bottom:1px solid var(--line)}
+.mlabel{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--ink-2);padding:14px 0 0;position:sticky}
+.mlabel.cur{color:var(--crit)}
+.mlabel small{display:block;font-size:10px;color:var(--ink-3);font-weight:400;margin-top:1px}
+.mitems{padding:12px 0;display:flex;flex-direction:column;gap:9px}
+.ci{display:grid;grid-template-columns:16px 1fr auto;gap:11px;align-items:start;padding:9px 12px;border-radius:9px;
+  background:var(--surface);border:1px solid var(--line)}
+.ci.pred{border-style:dashed;background:transparent}
+.ci .mk{margin-top:4px;width:10px;height:10px;border-radius:3px;background:var(--accent)}
+.ci.pred .mk{background:transparent;border:1.5px dashed var(--ink-3)}
+.ci.past{opacity:.62}
+.ci .nm{font-size:13.5px;font-weight:600;line-height:1.35}
+.ci .ac{font-size:12px;color:var(--ink-2);margin-top:2px}
+.ci .rt{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px;white-space:nowrap}
+.ci .win{font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
+.dcount{font-family:var(--mono);font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--surface-2);color:var(--ink-2)}
+.dcount.soon{background:var(--crit-soft);color:var(--crit)}
+.dcount.done{background:transparent;color:var(--ink-3);font-weight:400}
+.dcount.go{background:var(--good-soft);color:var(--good)}
+
+/* Roadmap */
+.rm-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);padding:15px 18px;box-shadow:var(--shadow);margin-bottom:8px}
+.rm-top .big{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--accent-ink);line-height:1}
+.rm-top .pbar{flex:1;min-width:180px;height:9px;border-radius:6px;background:var(--surface-3);overflow:hidden}
+.rm-top .pbar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-ink));border-radius:6px;transition:width .4s}
+.rm-top .rst{font-size:12px;color:var(--ink-2)}
+.rm-reset{border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600}
+.rm-reset:hover{border-color:var(--crit);color:var(--crit)}
+.phase{margin-top:14px}
+.phase .ph-h{display:flex;align-items:center;gap:11px;margin-bottom:9px}
+.phase .day{font-family:var(--mono);font-size:11px;font-weight:700;color:#fff;background:var(--accent);padding:3px 9px;border-radius:6px}
+.phase .ph-h h4{font-size:15px}
+.phase .ph-h .pc{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-left:auto}
+.tasks{display:flex;flex-direction:column;gap:2px}
+.task{display:flex;gap:11px;align-items:flex-start;padding:10px 13px;border-radius:9px;background:var(--surface);border:1px solid var(--line)}
+.task:hover{border-color:var(--line-2)}
+.task input{appearance:none;width:19px;height:19px;border:2px solid var(--line-2);border-radius:6px;margin-top:1px;flex:none;position:relative;background:var(--surface)}
+.task input:checked{background:var(--accent);border-color:var(--accent)}
+.task input:checked::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(42deg)}
+.task input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.task label{font-size:13.5px;line-height:1.5;cursor:pointer}
+.task.done label{color:var(--ink-3);text-decoration:line-through}
+.task .tt{font-family:var(--mono);font-size:10.5px;color:var(--accent-ink);background:var(--accent-soft);padding:1px 6px;border-radius:5px;margin-left:6px;text-decoration:none;display:inline-block}
+
+/* Manuals + resources */
+.acc{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden;box-shadow:var(--shadow)}
+.acc+.acc{margin-top:10px}
+.acc>summary{list-style:none;cursor:pointer;padding:15px 17px;display:flex;align-items:center;gap:12px}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary .idx{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent-ink)}
+.acc>summary h4{font-size:14.5px;flex:1}
+.acc>summary .st{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.acc>summary .arw{color:var(--ink-3);transition:transform .25s}
+.acc[open]>summary .arw{transform:rotate(90deg)}
+.acc .body{padding:2px 17px 17px;border-top:1px solid var(--line)}
+.acc .body dl{margin:0;display:grid;grid-template-columns:96px 1fr;gap:7px 14px;font-size:12.5px}
+.acc .body dt{font-family:var(--mono);font-size:11px;color:var(--ink-3);letter-spacing:.02em;padding-top:1px}
+.acc .body dd{margin:0;color:var(--ink-2)}
+.acc .body dd b{color:var(--ink)}
+.reslist{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.res{display:flex;flex-direction:column;padding:11px 13px;border:1px solid var(--line);border-radius:9px;background:var(--surface)}
+.res:hover{border-color:var(--accent);text-decoration:none}
+.res .rn{font-size:13px;font-weight:600;color:var(--ink)}
+.res .ru{font-family:var(--mono);font-size:11px;color:var(--accent-ink);word-break:break-all;margin-top:2px}
+
+/* Verify */
+.vrow{display:flex;gap:12px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}
+.vrow+.vrow{margin-top:10px}
+.vrow .ic{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:15px;font-weight:700}
+.vrow.ok .ic{background:var(--good-soft);color:var(--good)}
+.vrow.warn .ic{background:var(--amber-soft);color:var(--amber)}
+.vrow.note .ic{background:var(--accent-soft);color:var(--accent-ink)}
+.vrow h4{font-size:14px;margin-bottom:3px}
+.vrow p{font-size:12.5px;color:var(--ink-2);line-height:1.6}
+.vrow ul{margin:6px 0 0;padding-left:17px;font-size:12.5px;color:var(--ink-2);line-height:1.65}
+.vrow a{font-size:12px}
+.disc{margin-top:16px;font-size:12px;color:var(--ink-3);line-height:1.6;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+
+/* Version badge + changelog */
+.verwrap{position:relative}
+.verbadge{display:flex;align-items:center;gap:8px;background:var(--accent-soft);border:1px solid transparent;
+  border-radius:999px;padding:6px 14px;cursor:pointer;list-style:none;white-space:nowrap}
+.verbadge::-webkit-details-marker{display:none}
+.verbadge .vv{font-family:var(--mono);font-weight:800;font-size:14px;color:var(--accent-ink)}
+.verbadge .vd{font-family:var(--mono);font-size:11.5px;color:var(--ink-2)}
+.verbadge .varr{font-size:10px;color:var(--ink-3)}
+.vlog{position:absolute;right:0;top:calc(100% + 8px);z-index:60;width:340px;max-width:88vw;
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);
+  padding:14px 16px;max-height:340px;overflow-y:auto}
+.vlog h5{font-size:12.5px;margin:0 0 10px;color:var(--ink-2)}
+.vlog .vrow2{display:grid;grid-template-columns:auto auto 1fr;gap:8px;align-items:baseline;padding:6px 0;border-top:1px dashed var(--line);font-size:12px}
+.vlog .vrow2:first-of-type{border-top:0}
+.vlog .lv{font-family:var(--mono);font-weight:700;color:var(--accent-ink)}
+.vlog .ld{font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+.vlog .lw{color:var(--ink-2);line-height:1.45}
+.vlog .vrow2.new .lv{color:var(--amber)}
+@media(max-width:640px){.hdr-meta{display:none}}
+
+/* Infographics */
+.ig{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px}
+.ig h4{font-size:14px;margin-bottom:3px}
+.ig .igsub{font-size:12px;color:var(--ink-3);margin-bottom:14px}
+.hbars{display:flex;flex-direction:column;gap:9px}
+.hb{display:grid;grid-template-columns:150px 1fr 40px;gap:10px;align-items:center}
+.hb .hlb{font-size:12.5px;color:var(--ink-2);display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb .htrack{height:14px;background:var(--surface-3);border-radius:4px;overflow:hidden}
+.hb .hfill{height:100%;border-radius:0 4px 4px 0;background:var(--accent);min-width:4px}
+.hb .hval{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent-ink);text-align:right}
+@media(max-width:640px){.hb{grid-template-columns:110px 1fr 36px}}
+.funnel{display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.fstep{display:flex;align-items:center;gap:12px}
+.fstep .fbar{height:34px;border-radius:8px;display:flex;align-items:center;padding:0 14px;gap:9px;color:#fff;font-weight:700;font-size:13px;white-space:nowrap}
+.fstep:nth-child(1) .fbar{width:34%;background:var(--accent-ink)}
+.fstep:nth-child(2) .fbar{width:64%;background:var(--accent)}
+.fstep:nth-child(3) .fbar{width:100%;background:color-mix(in srgb,var(--accent) 55%,var(--surface-3))}
+.fstep .fdesc{font-size:12px;color:var(--ink-2);white-space:nowrap}
+@media(max-width:640px){.fstep .fdesc{display:none}}
+.pdist{display:flex;height:22px;border-radius:7px;overflow:hidden;margin:2px 0 6px;gap:2px;background:var(--bg)}
+.pdist span{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;color:#fff}
+.pdist .p5{background:var(--amber)} .pdist .p4{background:var(--accent)}
+.pdist .p3{background:var(--ink-3)} .pdist .p2{background:var(--line-2);color:var(--ink-2)}
+.pdist-leg{display:flex;gap:14px;font-size:11.5px;color:var(--ink-3);flex-wrap:wrap}
+.pdist-leg i{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:5px}
+.qbars{display:flex;gap:10px;align-items:flex-end;height:76px;margin-top:6px}
+.qb{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end}
+.qb .qfill{width:100%;max-width:64px;background:var(--accent);border-radius:5px 5px 0 0;position:relative}
+.qb .qv{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--accent-ink)}
+.qb .ql{font-size:11px;color:var(--ink-3);white-space:nowrap}
+.emj{font-size:17px;line-height:1;flex:none}
+.tk .emj{font-size:15px;margin-right:2px}
+.phase .day .pemj{margin-right:5px}
+
+/* Company news board */
+.cnews{display:flex;flex-direction:column;gap:8px}
+.cn{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg)}
+.cn .cd{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);white-space:nowrap;padding-top:2px}
+.cn .cco{font-size:11px;font-weight:700;color:var(--accent-ink);background:var(--accent-soft);padding:1px 7px;border-radius:5px;display:inline-block;margin-bottom:3px}
+.cn .cnm{font-size:12.5px;line-height:1.45;color:var(--ink)}
+.cn a{font-size:11.5px}
+
+/* v2.8 upgraded infographics */
+.kpi2{display:flex;gap:14px;align-items:center;padding:14px 16px}
+.ring{--p:0;width:72px;height:72px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:conic-gradient(var(--accent) calc(var(--p)*1%),var(--surface-3) 0)}
+.ring::before{content:"";width:54px;height:54px;border-radius:50%;background:var(--surface);grid-area:1/1}
+.ring span{grid-area:1/1;z-index:1;font-family:var(--mono);font-size:13px;font-weight:800;color:var(--accent-ink)}
+.ki .lb{font-size:13px;font-weight:700;line-height:1.3}
+.ki .gv{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent-ink);margin:2px 0 3px}
+.ki .why{font-size:11px;color:var(--ink-3);line-height:1.45}
+.donutwrap{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.donut{width:130px;height:130px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:conic-gradient(var(--amber) 0 13.8%,var(--accent) 0 48.3%,var(--ink-3) 0 86.2%,var(--line-2) 0)}
+.donut::before{content:"";width:88px;height:88px;border-radius:50%;background:var(--surface);grid-area:1/1;box-shadow:var(--shadow)}
+.donut .dc{grid-area:1/1;z-index:1;text-align:center;line-height:1.1}
+.donut .dc b{font-family:var(--mono);font-size:22px;color:var(--ink)}
+.donut .dc small{display:block;font-size:10px;color:var(--ink-3);margin-top:2px}
+.hb .hfill,.qb .qfill{background:linear-gradient(90deg,var(--accent-ink),var(--accent))}
+.qb .qfill{background:linear-gradient(180deg,var(--accent),var(--accent-ink))}
+.fstep .fbar{box-shadow:var(--shadow)}
+.fstep:nth-child(1) .fbar{background:linear-gradient(90deg,var(--accent-ink),#0a5b5e)}
+.fstep:nth-child(2) .fbar{background:linear-gradient(90deg,var(--accent),var(--accent-ink))}
+.tk,.ig,.mcard{transition:transform .18s ease,box-shadow .18s ease}
+.tk:hover,.ig:hover{transform:translateY(-2px);box-shadow:0 4px 8px rgba(20,32,43,.08),0 12px 28px rgba(20,32,43,.1)}
+.ddl{display:flex;flex-direction:column;gap:12px}
+.dd{display:grid;grid-template-columns:1fr auto;gap:4px 12px}
+.dd .dn{font-size:13px;font-weight:600}
+.dd .db{grid-column:1/-1;height:12px;border-radius:6px;background:var(--surface-3);overflow:hidden;position:relative}
+.dd .db>i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--amber))}
+.dd.hot .db>i{background:linear-gradient(90deg,var(--amber),var(--crit))}
+.dd .dbadge{font-family:var(--mono);font-size:12px;font-weight:800;padding:2px 10px;border-radius:7px;background:var(--accent-soft);color:var(--accent-ink)}
+.dd.hot .dbadge{background:var(--crit-soft);color:var(--crit)}
+.dd .dr{grid-column:1/-1;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+
+/* Monthly calendar grid */
+.mcal{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;margin:16px 0}
+.mcal-h{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.mcal-h h4{font-size:16px;font-family:var(--mono)}
+.mcal-h button{border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);width:30px;height:30px;border-radius:8px;font-size:13px}
+.mcal-h button:hover{border-color:var(--accent);color:var(--accent-ink)}
+.mcal-h .tag{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.mcal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mcal-dow{text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);padding:4px 0;font-weight:700}
+.mcal-dow.sun{color:var(--crit)} .mcal-dow.sat{color:var(--accent-ink)}
+.mcal-cell{min-height:62px;border:1px solid var(--line);border-radius:8px;padding:5px 6px;background:var(--bg);position:relative}
+.mcal-cell.out{opacity:.35;border-style:dashed}
+.mcal-cell .dnum{font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--ink-2)}
+.mcal-cell.sun .dnum{color:var(--crit)} .mcal-cell.sat .dnum{color:var(--accent-ink)}
+.mcal-cell.today{border:2px solid var(--accent);background:var(--accent-soft)}
+.mcal-cell.today .dnum::after{content:" 오늘";font-size:9px;color:var(--accent-ink)}
+.mcal-ev{display:block;margin-top:3px;font-size:9.5px;line-height:1.25;padding:2px 5px;border-radius:5px;
+  background:var(--accent-soft);color:var(--accent-ink);font-weight:600;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;cursor:default}
+.mcal-ev.due{background:var(--crit-soft);color:var(--crit)}
+.mcal-ev.pred{background:var(--surface-3);color:var(--ink-3)}
+.mcal-more{font-size:9px;color:var(--ink-3);margin-top:2px}
+@media(max-width:700px){.mcal-cell{min-height:48px}.mcal-ev{display:none}.mcal-cell .dots{display:flex;gap:2px;margin-top:3px}.mcal-cell .dots i{width:6px;height:6px;border-radius:50%;background:var(--accent)}.mcal-cell .dots i.due{background:var(--crit)}}
+
+/* Monitor */
+.mstat{display:flex;gap:14px;flex-wrap:wrap;align-items:stretch;margin-top:16px}
+.mstat .mcard{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px 18px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px}
+.mstat .mk2{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-3);text-transform:uppercase}
+.mstat .mv{font-size:21px;font-weight:800;letter-spacing:-.01em}
+.mstat .mv.yes{color:var(--crit)} .mstat .mv.no{color:var(--good)}
+.mstat .md2{font-size:12px;color:var(--ink-2)}
+.mstat .mv .mono{font-size:17px}
+.pulse{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:1px}
+.pulse.yes{background:var(--crit);box-shadow:0 0 0 3px var(--crit-soft)}
+.pulse.no{background:var(--good);box-shadow:0 0 0 3px var(--good-soft)}
+.mitem{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:13px 15px;border-radius:10px;
+  background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
+.mitem+.mitem{margin-top:9px}
+.mitem .mtag{font-family:var(--mono);font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:6px;
+  background:var(--accent-soft);color:var(--accent-ink);white-space:nowrap;margin-top:2px}
+.mitem .mtag.mro{background:var(--amber-soft);color:var(--amber)}
+.mitem h4{font-size:14px;line-height:1.4}
+.mitem .msrc{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:2px}
+.mitem .mnote{font-size:12.5px;color:var(--ink-2);margin-top:4px;line-height:1.55}
+.mitem .mdt{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);white-space:nowrap;text-align:right}
+.mempty{padding:26px 18px;text-align:center;color:var(--ink-3);font-size:13px;border:1px dashed var(--line-2);border-radius:10px;background:transparent}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:22px 0 34px;color:var(--ink-3);font-size:12px}
+footer .fin{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
+footer b{color:var(--ink-2)}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div style="min-width:0">
+        <div class="bt">WEFLO · 사업개발 실행 콘솔</div>
+        <div class="bs">국방·민간 드론·AI·AX 사업 실행 대시보드</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="hdr-meta">
+      <span class="mono" id="today">2026-05-23</span>
+      <span id="hdrdata" class="mono" style="font-size:10.5px"></span>
+    </div>
+    <details class="verwrap" id="verwrap">
+      <summary class="verbadge"><span class="vv" id="vv"></span><span class="vd" id="vd"></span><span class="varr">▼</span></summary>
+      <div class="vlog"><h5>📋 업데이트 이력 — 무엇이 달라졌나</h5><div id="vloglist"></div></div>
+    </details>
+    <button class="tgl" id="themeBtn" title="테마 전환" aria-label="테마 전환">◐</button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-in" role="tablist" id="tablist">
+    <button class="tab" role="tab" data-t="monitor" aria-selected="true"><span class="n">00</span>공고 모니터링</button>
+    <button class="tab" role="tab" data-t="weflowatch"><span class="n">01</span>위플로 워치</button>
+    <button class="tab" role="tab" data-t="overview"><span class="n">02</span>현황·좌표</button>
+    <button class="tab" role="tab" data-t="pipeline"><span class="n">03</span>트랙 파이프라인</button>
+    <button class="tab" role="tab" data-t="partners"><span class="n">04</span>기업 연계</button>
+    <button class="tab" role="tab" data-t="calendar"><span class="n">05</span>공고 캘린더</button>
+    <button class="tab" role="tab" data-t="roadmap"><span class="n">06</span>90일 로드맵</button>
+    <button class="tab" role="tab" data-t="manual"><span class="n">07</span>운영 매뉴얼</button>
+    <button class="tab" role="tab" data-t="verify"><span class="n">08</span>검증·출처</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ============ MONITOR ============ -->
+  <section class="panel on" id="monitor">
+    <div class="eyebrow">Public Procurement Watch · 공공 공고 감시</div>
+    <h1 class="ptitle">드론 · 드론정비 · MRO 공공 공고 모니터링</h1>
+    <p class="psub">정부부처·지자체·국가기관의 드론, 드론 정비, MRO 관련 공공 공고를 <b>매일 09시·14시</b> 자동 점검한다. 신규 유무는 <b>있든 없든 반드시 기록</b>되며, 아래 상태 카드가 마지막 점검 결과다.</p>
+
+    <div class="mstat" id="mstat"></div>
+
+    <div class="ig" style="margin-top:14px"><h4>⏳ 활성 마감 트래커</h4><div class="igsub">공고일→마감일 진행률 · 붉은색 = 마감 임박</div><div class="ddl" id="ddl"></div></div>
+
+    <div class="ig" style="margin-top:14px"><h4>피드 태그 분포</h4><div class="igsub">수집된 공고의 분야별 건수 (자동 집계)</div><div class="hbars" id="mtagchart"></div></div>
+
+    <div class="sec-head"><h3>신규 감지 공고 피드</h3><span class="rule"></span><span class="tag">최신순 · 자동 수집</span></div>
+    <div id="mfeed"></div>
+
+    <div class="sec-head"><h3>감시 채널</h3><span class="rule"></span><span class="tag">키워드: 드론 · 무인기 · UAM/AAM · 정비 · 점검 · MRO</span></div>
+    <div class="chips" style="margin-top:2px">
+      <span class="chip">나라장터 (g2b.go.kr)</span>
+      <span class="chip">국방전자조달 (d2b.go.kr)</span>
+      <span class="chip">기업마당 (bizinfo.go.kr)</span>
+      <span class="chip">항공안전기술원 KIAST</span>
+      <span class="chip">KRIT PMS</span>
+      <span class="chip">한국조달연구원 KIP</span>
+      <span class="chip">드론정보포털</span>
+      <span class="chip">방위사업청 · 국토부 · 과기부 · 산업부 · 중기부</span>
+      <span class="chip">광역지자체 공고</span>
+    </div>
+    <p class="disc" style="margin-top:18px">자동 점검은 공개 웹 검색 기반으로 주요 채널을 훑는 방식이라 모든 공고의 완전 수집을 보장하지 않는다. 마감 임박 트랙은 반드시 해당 기관 공식 채널에서 재확인할 것.</p>
+  </section>
+
+
+  <!-- ============ WEFLO WATCH ============ -->
+  <section class="panel" id="weflowatch">
+    <div class="eyebrow">WEFLO Watch · 전세계 위플로 추적</div>
+    <h1 class="ptitle">🛰️ 위플로 워치 — 국내·해외 언급 모니터</h1>
+    <p class="psub">국내외 어디서든 <b>위플로(WEFLO)가 언급·보도되면 이 화면에 수집</b>된다. 매일 정기 점검(09시·14시)에서 한국어 검색, 오전 회차에서 영문 글로벌 검색을 수행한다.</p>
+
+    <div class="mstat" style="margin-top:16px">
+      <div class="mcard"><span class="mk2">🛰️ 수집 현황</span><span class="mv" id="wwcnt">—</span><span class="md2">국내 + 해외 누적 수집 건수</span></div>
+      <div class="mcard"><span class="mk2">🕐 마지막 스캔</span><span class="mv"><span class="mono" id="wwchk">—</span></span><span class="md2">공고 모니터링과 동일 주기</span></div>
+      <div class="mcard"><span class="mk2">🔎 감시 범위</span><span class="mv" style="font-size:15px">국내 뉴스 · 해외 뉴스 · 공식 발표</span><span class="md2">한국어 매 회차 + 영문 오전 회차</span></div>
+    </div>
+
+    <div class="grid g2" style="margin-top:16px">
+      <div class="ig"><h4>🇰🇷 국내 소식</h4><div class="igsub">한국 언론·기관 발표</div><div class="cnews" id="wwkr"></div></div>
+      <div class="ig"><h4>🌏 해외 소식</h4><div class="igsub">글로벌 언론·해외 파트너십</div><div class="cnews" id="wwgl"></div></div>
+    </div>
+
+    <div class="sec-head"><h3>🔗 직접 검색 채널</h3><span class="rule"></span><span class="tag">수동 확인용</span></div>
+    <div class="reslist">
+      <a class="res" href="https://search.naver.com/search.naver?where=news&query=%EC%9C%84%ED%94%8C%EB%A1%9C+%EB%93%9C%EB%A1%A0" target="_blank" rel="noopener"><span class="rn">네이버 뉴스 검색</span><span class="ru">위플로 드론</span></a>
+      <a class="res" href="https://news.google.com/search?q=WEFLO%20drone" target="_blank" rel="noopener"><span class="rn">구글 뉴스 (영문)</span><span class="ru">WEFLO drone</span></a>
+      <a class="res" href="https://weflo.ai/article/news" target="_blank" rel="noopener"><span class="rn">위플로 공식 뉴스룸</span><span class="ru">weflo.ai</span></a>
+      <a class="res" href="https://www.cbinsights.com/company/weflo" target="_blank" rel="noopener"><span class="rn">CB Insights 기업 프로필</span><span class="ru">투자·글로벌 지표</span></a>
+    </div>
+  </section>
+
+  <!-- ============ OVERVIEW ============ -->
+  <section class="panel" id="overview">
+    <div class="eyebrow">Executive Summary · 요약 및 핵심 메시지</div>
+    <h1 class="ptitle">위플로의 현재 좌표와 사업 풀</h1>
+    <p class="psub">기술 검증과 첫 트랙 진입은 완료됐다. 다음 도약은 <b>제도·조달·정책·군 도메인</b> — 기술팀이 채우기 어려운 결정적 공백이며, 이 콘솔은 그 공백을 1인이 동시 운용 가능한 실행 자산으로 전환한다.</p>
+
+    <div class="grid g-hero" style="margin-top:18px">
+      <div class="card hero">
+        <h2>위플로(WEFLO)</h2>
+        <p class="co">2022.4 <b>한화시스템 사내벤처 분사</b> · 본사 대전 대덕구 한남대 캠퍼스혁신파크 · 대표 <b>김의정</b>. AAM·드론 비접촉 자동점검 솔루션 <b>‘verti-Pit’</b> 시리즈(10초 이내 상태 진단·DB화)로 이미 다음 트랙에 진입해 있다.</p>
+        <div class="chips">
+          <span class="chip on">방산혁신기업 100 (드론·5년 50억)</span>
+          <span class="chip on">육군 교육사 전투실험 유효성 판정</span>
+          <span class="chip">국토부 드론배송 19지자체·38거점</span>
+          <span class="chip">AI 점검패드 29기 운영</span>
+          <span class="chip">드론작사 인프라 2곳</span>
+          <span class="chip">WB Electronics MoU</span>
+          <span class="chip">NASA AAM WG 멤버</span>
+          <span class="chip">CES 2024·2025</span>
+          <span class="chip on">시리즈A 55억 (누적 118억)</span>
+        </div>
+      </div>
+      <div class="grid" style="gap:12px">
+        <div class="card metric acc"><span class="k">진입 완료 트랙</span><span class="v">4–5</span><span class="d">기술 검증 + 첫 매출 채널 확보</span></div>
+        <div class="card metric"><span class="k">즉시 응모 가능</span><span class="v">15<span style="font-size:16px">+</span></span><span class="d">공고 확인 · dossier만 준비</span></div>
+        <div class="card metric"><span class="k">중기 설계 트랙</span><span class="v">25<span style="font-size:16px">+</span></span><span class="d">부처 분산 → 통합 운용 필요</span></div>
+      </div>
+    </div>
+
+    <div class="sec-head"><h3>📊 사업 풀 한눈에</h3><span class="rule"></span><span class="tag">50+ 트랙 매핑</span></div>
+    <div class="grid g2">
+      <div class="ig">
+        <h4>부처·기관별 사업 수</h4>
+        <div class="igsub">본 보고서가 매핑한 트랙 분포 (건)</div>
+        <div class="hbars">
+          <div class="hb"><span class="hlb"><span class="emj">🎖️</span>방사청·KRIT·신속원</span><div class="htrack"><div class="hfill" style="width:100%"></div></div><span class="hval">10+</span></div>
+          <div class="hb"><span class="hlb"><span class="emj">🚀</span>과기·산업·중기부</span><div class="htrack"><div class="hfill" style="width:100%"></div></div><span class="hval">10+</span></div>
+          <div class="hb"><span class="hlb"><span class="emj">🪖</span>육군</span><div class="htrack"><div class="hfill" style="width:80%"></div></div><span class="hval">8+</span></div>
+          <div class="hb"><span class="hlb"><span class="emj">⚓</span>해군·해병·드론사</span><div class="htrack"><div class="hfill" style="width:60%"></div></div><span class="hval">6+</span></div>
+          <div class="hb"><span class="hlb"><span class="emj">✈️</span>공군</span><div class="htrack"><div class="hfill" style="width:50%"></div></div><span class="hval">5+</span></div>
+          <div class="hb"><span class="hlb"><span class="emj">🤝</span>횡단·연합 (AAM 6부처)</span><div class="htrack"><div class="hfill" style="width:50%"></div></div><span class="hval">5+</span></div>
+          <div class="hb"><span class="hlb"><span class="emj">🛩️</span>국토부 (KIAST)</span><div class="htrack"><div class="hfill" style="width:30%"></div></div><span class="hval">3+</span></div>
+          <div class="hb"><span class="hlb"><span class="emj">🏛️</span>국방부 직접</span><div class="htrack"><div class="hfill" style="width:30%"></div></div><span class="hval">3+</span></div>
+        </div>
+      </div>
+      <div class="ig">
+        <h4>진입 단계 퍼널</h4>
+        <div class="igsub">이미 확보한 자산 → 당장 응모 → 중기 설계</div>
+        <div class="funnel">
+          <div class="fstep"><div class="fbar">✅ 진입 완료 4–5</div><span class="fdesc">기술 검증 + 첫 매출 채널</span></div>
+          <div class="fstep"><div class="fbar">⚡ 즉시 응모 15+</div><span class="fdesc">dossier만 준비하면 응모 가능</span></div>
+          <div class="fstep"><div class="fbar">🧭 중기 설계 25+</div><span class="fdesc">6~12개월 진입 설계 트랙</span></div>
+        </div>
+        <p style="font-size:12px;color:var(--ink-2);margin-top:14px;line-height:1.6">부처별로 분산된 트랙을 <b>한 사람이 통합 운용</b>하는 것이 본 콘솔의 목적 — 아래 3대 Gap이 그 공백이다.</p>
+      </div>
+    </div>
+
+    <div class="sec-head"><h3>🧩 지금 필요한 것 — 3대 Gap</h3><span class="rule"></span><span class="tag">외부 채용으로 메울 공백</span></div>
+    <div class="grid g3">
+      <div class="card gap"><div class="lab"><span class="badge">A</span><span class="emj">⚙️</span><h4>전력화 환산</h4></div><p>각 군 소요결정 → 무기체계 / 전력지원체계 전력화 트랙 설계</p></div>
+      <div class="card gap"><div class="lab"><span class="badge">B</span><span class="emj">🗂️</span><h4>다부처 동시 수주</h4></div><p>DAPA·KRIT·국토부·과기부·산업부·중기부 트랙을 1인이 동시 운용</p></div>
+      <div class="card gap"><div class="lab"><span class="badge">C</span><span class="emj">🌏</span><h4>해외 B2G 진입</h4></div><p>USSOCOM·NATO NSN 기반 미국·NATO 조달 시장 진입</p></div>
+    </div>
+
+    <div class="sec-head"><h3>💼 사업이사 직무 정의 — 6개 영역</h3><span class="rule"></span><span class="tag">제19장 · 협의 후 확정</span></div>
+    <div class="grid g3">
+      <div class="card role"><span class="emj">🏆</span><div><h4>정부 R&D 수주 총괄</h4><p>30+ 트랙 응모·수주·관리 총괄</p></div></div>
+      <div class="card role"><span class="emj">🤝</span><div><h4>B2G 영업 채널</h4><p>각 군·부처·19개 지자체 키맨 관계 운영</p></div></div>
+      <div class="card role"><span class="emj">📜</span><div><h4>공공조달·인증</h4><p>NET·EPC·우수조달물품·MAS 통합 운용</p></div></div>
+      <div class="card role"><span class="emj">🌏</span><div><h4>해외 수출 트랙</h4><p>NSN·NSPA·USSOCOM·SBIR — WBE MoU 후속</p></div></div>
+      <div class="card role"><span class="emj">📈</span><div><h4>시리즈B IR 자산</h4><p>R&D·B2G·인증·NSN을 IR 핵심으로 환산</p></div></div>
+      <div class="card role"><span class="emj">🏛️</span><div><h4>정책·거버넌스</h4><p>범정부 드론 TF·클러스터·KAIST 컨소시엄</p></div></div>
+    </div>
+
+    <div class="sec-head"><h3>🎯 KPI 목표</h3><span class="rule"></span><span class="tag">현재 진척 0% 기준선 · 분기별 재조정 전제</span></div>
+    <div class="grid g2">
+      <div class="card" style="padding:6px 4px">
+        <div style="padding:12px 15px 4px;font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.04em">1년차 (입사 후 12개월)</div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:0">
+          <div class="kpi kpi2"><div class="ring" style="--p:4"><span>4%</span></div><div class="ki"><div class="lb">정부 R&D 신규 수주</div><div class="gv">목표 100억+</div><div class="why">신속시범 50 + 우수상용품 10 + KRIT 20 + 기타 20</div></div></div>
+          <div class="kpi kpi2"><div class="ring" style="--p:4"><span>4%</span></div><div class="ki"><div class="lb">B2G 신규 계약</div><div class="gv">목표 30억+</div><div class="why">지역제한입찰 + 우선구매 + 수의계약 첫 사례</div></div></div>
+          <div class="kpi kpi2"><div class="ring" style="--p:8"><span>8%</span></div><div class="ki"><div class="lb">인증 통합 트랙</div><div class="gv">목표 50% 완성</div><div class="why">NET 신청 + EPC 발급 + 우수조달물품 응모</div></div></div>
+          <div class="kpi kpi2"><div class="ring" style="--p:4"><span>4%</span></div><div class="ki"><div class="lb">NSN 12개월 로드맵</div><div class="gv">목표 50% 진척</div><div class="why">CAGE·STANAG 4177·NCB 부여 단계 통과</div></div></div>
+        </div>
+      </div>
+      <div class="card" style="padding:6px 4px">
+        <div style="padding:12px 15px 4px;font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.04em">3년차 (36개월) · 시리즈B 클로징 시점</div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:0">
+          <div class="kpi kpi2"><div class="ring" style="--p:2"><span>2%</span></div><div class="ki"><div class="lb">정부 R&D 누적</div><div class="gv">목표 500억+</div><div class="why">방산혁신 50 + 신속시범 200+ + 기타 250</div></div></div>
+          <div class="kpi kpi2"><div class="ring" style="--p:2"><span>2%</span></div><div class="ki"><div class="lb">B2G 매출 누적</div><div class="gv">목표 200억+</div><div class="why">수의계약·우선구매·MAS 수주</div></div></div>
+          <div class="kpi kpi2"><div class="ring" style="--p:2"><span>2%</span></div><div class="ki"><div class="lb">NSN·NSPA 진입</div><div class="gv">목표 완료</div><div class="why">NMCRL·DLA eMall 등재 — NATO 30개국 공통</div></div></div>
+          <div class="kpi kpi2"><div class="ring" style="--p:2"><span>2%</span></div><div class="ki"><div class="lb">시리즈B 클로징</div><div class="gv">목표 100–200억</div><div class="why">R&D+B2G+NSN 자산을 IR로 환산</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PIPELINE ============ -->
+  <section class="panel" id="pipeline">
+    <div class="eyebrow">제18장 · 기여 매트릭스</div>
+    <h1 class="ptitle">트랙 파이프라인 (30+ 사업 × 90일 액션)</h1>
+    <p class="psub">우선순위는 ① 단발 매출 규모 ② 시점 임박성 ③ 위플로 보유 자산 매칭도 ④ 시리즈B IR 가치를 종합 평가한 값이다. 자원 배분 원칙: <b>Top 5(★5)에 80% 집중</b>, 나머지는 분기별 모니터링 시트로 자동 추적.</p>
+
+    <div class="top5note">💡 <b>Top 4 (★★★★★)</b> — 대전 방산혁신클러스터 · 우수상용품 시범사용 · 수출(NSN) · 인증 통합. 입사 첫 90일 자원의 80%를 여기에 집중한다. (신속시범은 무기체계 분류 전제라 ★3으로 하향 — 사용자 판단 반영)</div>
+
+    <div class="ig" style="margin-top:14px">
+      <h4>우선순위 분포 — 29개 트랙</h4>
+      <div class="igsub">별점(★)별 트랙 수 · 막대 폭 = 비중</div>
+      <div class="donutwrap">
+        <div class="donut"><div class="dc"><b>29</b><small>트랙</small></div></div>
+        <div style="flex:1;min-width:240px">
+      <div class="pdist">
+        <span class="p5" style="flex:4" title="★5 · 4개">4</span>
+        <span class="p4" style="flex:10" title="★4 · 10개">10</span>
+        <span class="p3" style="flex:11" title="★3 · 11개">11</span>
+        <span class="p2" style="flex:4" title="★2 · 4개">4</span>
+      </div>
+      <div class="pdist-leg">
+        <span><i style="background:var(--amber)"></i>★5 최우선 (90일 80% 집중)</span>
+        <span><i style="background:var(--accent)"></i>★4 6개월 내 응모</span>
+        <span><i style="background:var(--ink-3)"></i>★3 12개월 내 진입</span>
+        <span><i style="background:var(--line-2)"></i>★2 모니터링</span>
+      </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filters" style="margin-top:16px" id="pf">
+      <span style="font-size:12px;color:var(--ink-3);font-family:var(--mono)">우선순위</span>
+      <button class="fbtn star" data-star="5" aria-pressed="false">★5</button>
+      <button class="fbtn star" data-star="4" aria-pressed="false">★4</button>
+      <button class="fbtn star" data-star="3" aria-pressed="false">★3</button>
+      <button class="fbtn star" data-star="2" aria-pressed="false">★2</button>
+      <span style="width:12px"></span>
+      <span style="font-size:12px;color:var(--ink-3);font-family:var(--mono)">상태</span>
+      <button class="fbtn" data-st="new" aria-pressed="false">미진입</button>
+      <button class="fbtn" data-st="active" aria-pressed="false">진입/자산</button>
+      <button class="fbtn" data-st="review" aria-pressed="false">검토</button>
+      <span class="fcount" id="pcount"></span>
+    </div>
+    <div class="board" id="board"></div>
+  </section>
+
+
+  <!-- ============ PARTNERS ============ -->
+  <section class="panel" id="partners">
+    <div class="eyebrow">Industry Map · 국내 드론 생태계</div>
+    <h1 class="ptitle">🤝 드론 관련 기업 연계 맵</h1>
+    <p class="psub">위플로는 기체를 만들지 않는다 — <b>모든 제조사의 드론이 위플로의 점검 대상(모수)</b>이다. 제조사가 늘고 기체가 팔릴수록 verti-Pit 시장이 커지는 구조이므로, 아래 기업들은 경쟁자가 아니라 <b>고객·번들링 파트너 후보</b>다. (공개 정보 기반 요약 — 상세는 <a href="https://droneportal.go.kr/main/web/drone/makrInfo/list" target="_blank" rel="noopener">드론정보포털 기업검색</a> 참조)</p>
+    <div class="sec-head"><h3>📰 최근 기업 소식</h3><span class="rule"></span><span class="tag">모니터링 자동 갱신 · 최신순</span></div>
+    <div class="grid g2">
+      <div class="ig"><h4>🇰🇷 한국 기업</h4><div class="igsub">국내 드론 기업 주요 동향</div><div class="cnews" id="cnkr"></div></div>
+      <div class="ig"><h4>🇺🇸 미국 기업</h4><div class="igsub">미국 주요 드론 기업 계약·투자</div><div class="cnews" id="cnus"></div></div>
+    </div>
+
+    <div id="pmap" style="margin-top:8px"></div>
+    <p class="disc" style="margin-top:18px">분류·연계 포인트는 공개 보도 기반의 참고용 정리이며, 실제 협력 논의 전 각사 최신 사업 현황 확인이 필요하다. ⚠️ 표시는 사업 영역이 인접해 경쟁 가능성이 있는 기업.</p>
+  </section>
+
+  <!-- ============ CALENDAR ============ -->
+  <section class="panel" id="calendar">
+    <div class="eyebrow">제17장 · 2026 응모 캘린더</div>
+    <h1 class="ptitle">공고 캘린더 — 응모 일정 한눈에</h1>
+    <p class="psub">2025년 트래픽 패턴 기반 2026 월별 액션 시트. 응모 가능 트랙은 연중 균등 분포(1~3월 7건 · 4~6월 6건 · 7~9월 5건 · 10~12월 5건)하며, 분기별 모니터링 시트 4종으로 1년 응모 사이클을 자동화한다.</p>
+    <div class="mcal">
+      <div class="mcal-h"><button id="mcPrev" aria-label="이전 달">◀</button><h4 id="mcTitle"></h4><button id="mcNext" aria-label="다음 달">▶</button><span class="tag">🔴 마감 · 🟢 일정 · 회색 예측</span></div>
+      <div class="mcal-grid" id="mcGrid"></div>
+    </div>
+
+    <div class="ig" style="margin:16px 0">
+      <h4>분기별 응모 분포</h4>
+      <div class="igsub">연중 균등 분포 — 매 분기 응모 사이클이 돌아간다 (건)</div>
+      <div class="qbars">
+        <div class="qb"><span class="qv">7</span><div class="qfill" style="height:100%"></div><span class="ql">1~3월</span></div>
+        <div class="qb"><span class="qv">6</span><div class="qfill" style="height:86%"></div><span class="ql">4~6월</span></div>
+        <div class="qb"><span class="qv">5</span><div class="qfill" style="height:71%"></div><span class="ql">7~9월</span></div>
+        <div class="qb"><span class="qv">5</span><div class="qfill" style="height:71%"></div><span class="ql">10~12월</span></div>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="dot conf"></i> 실제 공고 확인</span>
+      <span><i class="dot pred"></i> 예측 (전년 패턴)</span>
+      <span><i class="dot now"></i> 이번 달 / 임박</span>
+      <span class="mono" style="margin-left:auto;color:var(--ink-3)">오늘 기준 D-day 자동 계산</span>
+    </div>
+    <div class="cal" id="cal"></div>
+  </section>
+
+  <!-- ============ ROADMAP ============ -->
+  <section class="panel" id="roadmap">
+    <div class="eyebrow">제19장 · 실행 로드맵</div>
+    <h1 class="ptitle">입사 후 90일 실행 체크리스트</h1>
+    <p class="psub">한 사람이 50+ 트랙을 동시 가동하는 4단계 실행 계획. 체크 상태는 이 브라우저에 자동 저장된다 — 팀 공유 시 각자의 진척을 따로 관리할 수 있다.</p>
+    <div class="rm-top" style="margin-top:16px">
+      <span class="big" id="rmPct">0%</span>
+      <div style="flex:1;min-width:180px">
+        <div class="pbar"><i id="rmBar" style="width:0%"></i></div>
+        <div class="rst" id="rmStat" style="margin-top:7px">0 / 0 완료</div>
+      </div>
+      <button class="rm-reset" id="rmReset">진척 초기화</button>
+    </div>
+    <div id="phases"></div>
+  </section>
+
+  <!-- ============ MANUAL ============ -->
+  <section class="panel" id="manual">
+    <div class="eyebrow">제20장 · 핵심 트랙 운영 매뉴얼</div>
+    <h1 class="ptitle">6개 핵심 트랙 운영 매뉴얼 + 공식 채널</h1>
+    <p class="psub">응모부터 사후 follow-up까지 표준 절차. 각 카드는 요약 기준선이며, 응모 직전 공식 채널에서 일정·자격·예산 재확인이 필수다.</p>
+    <div id="manuals" style="margin-top:16px"></div>
+
+    <div class="sec-head"><h3>공식 채널 · 응모 사이트</h3><span class="rule"></span><span class="tag">부록 · 공개 출처</span></div>
+    <div class="reslist" id="reslist"></div>
+  </section>
+
+  <!-- ============ VERIFY ============ -->
+  <section class="panel" id="verify">
+    <div class="eyebrow">검증 노트 · Verification</div>
+    <h1 class="ptitle">데이터 검증 및 출처 신뢰도</h1>
+    <p class="psub">대표·이사 공유 전 확인해 둘 사항. 보고서의 좌표(company facts)는 외부 공개출처와 교차확인했고, 미래 일정·KPI는 성격(확정/예측/협의대상)을 명시한다.</p>
+
+    <div style="margin-top:16px">
+      <div class="vrow ok"><div class="ic">✓</div><div>
+        <h4>외부 공개출처로 확인된 좌표</h4>
+        <p>회사의 핵심 실적은 언론·공식 보도자료 다수와 일치한다.</p>
+        <ul>
+          <li><b>시리즈A 55억 원</b> 유치 (2026.4.7) · 누적 투자 약 118억 원 — 벤처스퀘어·유니콘팩토리·AI타임스·이데일리 등 다수 보도 일치.</li>
+          <li><b>방산혁신기업 100</b> 드론 분야 선정 — 5년 최대 50억 국비, 종합 Full-Package. 방위사업청 공모 사실 확인.</li>
+          <li><b>verti-Pit</b> 국토부 드론배송 실증 — 19개 지자체·38개 거점·152개 배송점·AI 점검패드 29기 운영.</li>
+          <li><b>육군 교육사</b> 드론 점검 솔루션 전투실험 유효성 판정 — 보도자료로 확인.</li>
+        </ul>
+      </div></div>
+
+      <div class="vrow warn"><div class="ic">!</div><div>
+        <h4>재확인이 필요한 항목 (응모 직전 필수)</h4>
+        <ul>
+          <li><b>공고 일정·예산·자격요건은 매년 갱신</b>된다 — 응모 직전 해당 기관 공식 채널에서 반드시 재확인 (보고서 부록도 명시).</li>
+          <li>2026 <b>하반기 예측 일정</b>(신속시범 26-2차, 우수상용품 하반기, UWC, 방산스타트업 챌린지 등)은 전년 패턴 기반 <b>예측치</b> — 콘솔에서 점선으로 구분 표시.</li>
+          <li>별표(<b>★</b>) 등급은 보고서 작성자의 <b>주관적 중요도·긴급성 평가</b> 지표다.</li>
+        </ul>
+      </div></div>
+
+      <div class="vrow note"><div class="ic">i</div><div>
+        <h4>경미한 확인점 · 사내 기록 대조 권장</h4>
+        <ul>
+          <li>방산혁신기업 100 — 위플로 선정은 <b>2024년 사이클</b>(2025.2.5 발표)로 확인된다. 본문 일부 ‘4기 선정(’25.12.16)’ 서술은 4기 수여식 일반 기술과 혼재될 수 있으니 <b>위플로 선정 기수·일자는 사내 기록으로 최종 확인</b> 권장.</li>
+          <li><b>KPI 수치</b>(1년 R&D 100억 / 3년 500억 등)는 사업이사 첫 미팅에서 조정·합의할 <b>출발점</b> — R&D lead time(6~12개월)·인증 발급 시점에 따라 변동성이 크다(보고서 명시). 콘솔 진척 바는 0% 기준선으로 시작한다.</li>
+        </ul>
+      </div></div>
+
+      <p class="disc">본 콘솔은 「위플로 활용 종합보고서」(2026.5.23, 작성 Kim Jo Eul)의 공개 출처 기반 내용을 실행 도구로 재구성한 것이다. 기밀·보안 정보는 포함하지 않으며, 모든 좌표는 공개 인터넷 공고·언론보도·정부 정책자료에 근거한다. 수치·일정은 참고 기준선이며 의사결정 전 공식 채널 재확인을 전제로 한다.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer><div class="wrap fin">
+  <span>출처: <b>위플로 활용 종합보고서</b> (2026.5.23) · 작성 <b>Kim Jo Eul</b></span>
+  <span class="mono">검증: 주요 공개사실 교차확인 완료 · 실행 콘솔 v2.9</span>
+</div></footer>
+
+<script>
+"use strict";
+/* ---------- THEME ---------- */
+(function(){
+  const root=document.documentElement, KEY="weflo-theme";
+  const saved=localStorage.getItem(KEY);
+  if(saved) root.setAttribute("data-theme",saved);
+  document.getElementById("themeBtn").addEventListener("click",()=>{
+    const cur=root.getAttribute("data-theme")|| (matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light");
+    const next=cur==="dark"?"light":"dark";
+    root.setAttribute("data-theme",next); localStorage.setItem(KEY,next);
+  });
+})();
+
+/* ---------- TABS ---------- */
+(function(){
+  const tabs=[...document.querySelectorAll(".tab")], panels=[...document.querySelectorAll(".panel")];
+  function show(id){
+    tabs.forEach(t=>t.setAttribute("aria-selected",String(t.dataset.t===id)));
+    panels.forEach(p=>p.classList.toggle("on",p.id===id));
+    if(location.hash.slice(1)!==id) history.replaceState(null,"","#"+id);
+    window.scrollTo({top:0,behavior:"instant"in window?"instant":"auto"});
+  }
+  tabs.forEach(t=>t.addEventListener("click",()=>show(t.dataset.t)));
+  const h=location.hash.slice(1);
+  if(h&&document.getElementById(h)) show(h);
+})();
+
+
+/* ---------- VERSION LOG (업데이트마다 맨 앞에 추가) ---------- */
+const VLOG=[
+ {v:"v2.9",d:"08-02",w:"📅 진짜 월간 달력 그리드 추가 — 날짜 칸에 공고·마감 표시, 오늘 강조, 월 넘김"},
+ {v:"v2.8",d:"08-02",w:"인포그래픽 고도화 — KPI 링 게이지·우선순위 도넛·활성 마감 D-day 트래커·그라디언트·호버 효과"},
+ {v:"v2.7",d:"08-02",w:"헤더에 버전·날짜 배지 + 업데이트 이력 드롭다운 추가"},
+ {v:"v2.6",d:"08-02",w:"🛰️ 위플로 워치 탭 신설 — 국내·해외 위플로 언급 자동 추적 + '혁신 프리미어 1000' 선정 반영"},
+ {v:"v2.5",d:"08-02",w:"기업 연계 탭에 🇰🇷/🇺🇸 기업 소식 게시판 추가 (모니터링 자동 갱신)"},
+ {v:"v2.4",d:"08-02",w:"기업 카드에 공식 홈페이지·상세검색 링크"},
+ {v:"v2.3",d:"08-02",w:"미국 주요 드론 기업 6종(Skydio·Anduril 등) 추가 + 매일 미국 동향 모니터링"},
+ {v:"v2.2",d:"08-02",w:"🤝 기업 연계 탭 신설(국내 15개사) · 신속시범 ★5→★3 하향(사용자 판단)"},
+ {v:"v2.1",d:"08-02",w:"모니터링 탭 태그 분포 차트 · 버전 표시 도입"},
+ {v:"v2.0",d:"08-02",w:"인포그래픽 전면 적용 — 부처별 막대그래프·진입 퍼널·우선순위 분포·분기 차트·아이콘 체계"},
+ {v:"v1.2",d:"07-28",w:"공식 공고 링크 우선 규칙 적용 · 검색 3그룹 체계로 모니터링 강화"},
+ {v:"v1.1",d:"07-13",w:"공고 모니터링 탭 신설 + 매일 09시·14시 자동 점검 가동"},
+ {v:"v1.0",d:"07-13",w:"최초 구축 — 종합보고서를 6개 탭 실행 콘솔로 전환"}
+];
+(function(){
+  const cur=VLOG[0];
+  document.getElementById("vv").textContent=cur.v;
+  document.getElementById("vd").textContent=cur.d+" 업데이트";
+  document.getElementById("vloglist").innerHTML=VLOG.map((l,i)=>
+    `<div class="vrow2 ${i===0?'new':''}"><span class="lv">${l.v}</span><span class="ld">${l.d}</span><span class="lw">${l.w}</span></div>`).join("");
+  document.addEventListener("click",e=>{const w=document.getElementById("verwrap");if(w.open&&!w.contains(e.target))w.open=false;});
+})();
+
+/* ---------- DATE ---------- */
+const TODAY=new Date();
+(function(){
+  const y=TODAY.getFullYear(),m=String(TODAY.getMonth()+1).padStart(2,"0"),d=String(TODAY.getDate()).padStart(2,"0");
+  document.getElementById("today").textContent=`오늘 ${y}-${m}-${d}`;
+})();
+
+/* ---------- MONITOR DATA (자동 업데이트 영역: 매일 09시·14시 점검 후 갱신) ---------- */
+const MONITOR={
+ checked:"2026-08-12 14:03 (KST) · 정기 점검",
+ next:"매일 09:00 · 14:00 (KST)",
+ items:[{d:"08-10",tag:"드론",src:"조달청·나라장터",nm:"'융복합 드론스테이션 임대서비스' 종합쇼핑몰 최초 등록 — 드론+스테이션+관제를 구독형으로 조달. 산불감시·시설물 안전점검 용도 (기사)",note:"7/14 게시분 — 위플로 시사점: 점검 패드도 '서비스상품' 등록 시 공공기관이 구매 아닌 임대로 도입 가능한 선례",url:"https://www.irobotnews.com/news/articleView.html?idxno=47424"},{d:"08-10",tag:"US",src:"USSOCOM·SOFWERX",nm:"美 특수전사령부 SBIR 26.BZ 제안 접수 중 — 마감 8/19(현지). 미국 국방 조달 표준 진입로, 위플로 산호세 법인 활용 검토 대상",note:"7/22 접수 개시 — 금회 점검에서 포착",url:"https://events.sofwerx.org/sbir-26-bz-release-4"},{d:"08-04",tag:"정비",src:"항공안전기술원(KIAST)",nm:"드론 정비능력확인제도 본격 시행 — 확인받은 정비업체 경유 시 정기 안전성인증 현장검사(지상점검·비행시험)를 서류검사로 대체 (기사)",note:"위플로 직결: 자동 점검 데이터가 정비능력확인 요건·정기인증 간소화의 근거 인프라. 확인업체 목록은 safeflying.kr 조회",url:"https://www.newswire.co.kr/newsRead.php?no=974164"},{d:"08-03",tag:"드론",src:"국방부·KIP",nm:"2026년 국방분야 혁신제품 지정 시범과제 신청 공고(제2026-306호) — 방산혁신 100 기업 유리, 지정 시 수의계약 경로. 접수 마감일은 공고문(PDF) 확인 필요",note:"6/30 게시 — 금회 점검에서 신규 포착",url:"https://www.kip.re.kr/src/uploads/20260630/260629_%EA%B5%AD%EB%B0%A9%EB%B6%80_%EA%B3%B5%EA%B3%A0_2026-306%ED%98%B8_2026%EB%85%84_%EA%B5%AD%EB%B0%A9%EB%B6%84%EC%95%BC_%ED%98%81%EC%8B%A0%EC%A0%9C%ED%92%88_%EC%A7%80%EC%A0%95_%EC%8B%9C%EB%B2%94%EA%B3%BC%EC%A0%9C_%EC%8B%A0%EC%B2%AD_%EA%B3%B5%EA%B3%A0%EB%AC%B81.pdf"},
+  {d:"2026-07-28",tag:"드론",src:"서울특별시",nm:"교량 안전점검 로봇·드론 신기술 공개 모집 — 접수 ~8.7 (D-10)",
+   note:"지자체 드론 기술 공모 — 3개 내외 선정, 9~12월 성산대교·올림픽대교 현장 실증, 소재지 무관 참여 가능. 위플로 핵심(기체 점검)과 결이 다르나 비접촉 센서·AI 손상감지 응용 검토 대상. 공식 공고는 서울시 고시공고 게시판에서 '안전점검' 검색.",url:"https://www.seoul.go.kr/news/news_notice.do"},
+  {d:"2026-07-26",tag:"드론",src:"중소벤처기업부 · 혁신조달",nm:"2026 하반기 혁신제품 신규 지정 신청 — 접수 ~8.10 (D-15)",
+   note:"공공조달 Top5 트랙(제15장) — 12월 최종 지정, 지정 시 시범구매·수의계약 자격. 신청 요건(최근 5년 내 중기부 R&D 성공 완료) 해당 여부 우선 확인 필요. 공식 공고문은 중기부 사업공고 게시판에서 '혁신제품' 검색.",url:"https://www.mss.go.kr/site/smba/ex/bbs/List.do?cbIdx=310"},
+  {d:"2026-07-22",tag:"드론",src:"중소벤처기업부 · K-Startup",nm:"「모두의 챌린지-방산」 참여 스타트업 모집 — 접수 7.16~8.4 (D-13)",
+   note:"보고서 Top 트랙(제13장 방산 스타트업 챌린지)의 2026 공고 — 50개사 내외, 최대 1억 협업자금 + 후속 R&D 연계. 군·수요기업 협업 오픈이노베이션. 공식 공고·신청은 K-Startup 사업공고에서 '방산' 검색.",url:"https://www.k-startup.go.kr/web/contents/bizpbanc-ongoing.do"},
+  {d:"2026-07-20",tag:"정비",src:"방위사업청 · KRIT (공고 제2026-65호)",nm:"26-2차 무기체계 부품국산화개발 지원사업 연구개발기관 모집 (재공고)",
+   note:"보고서 추적 트랙(제2장 3절) — 비접촉 점검 센서·예지정비 SW 핵심부품 국산화 응모 검토. 접수 기간은 DAPA·DTiMS 공고문에서 확인 필요.",url:"https://www.korea-uvs.org/notice/articles/view/tableid/notice/id/870"},
+  {d:"2026-07-20",tag:"드론",src:"우주항공청(KASA) (공고 제2026-0060호)",nm:"차세대 항공 기체 부품 첨단제조 실증 지원 기반구축 사업 (재공고)",
+   note:"항공 기체 부품 실증 인프라 사업 — 점검 센서·부품 신뢰성 실증 연계 가능성 검토. 접수 일정 공고문 확인 필요.",url:"https://www.kasa.go.kr/bbs/BBSMSTR_000000000018/view.do?nttId=B000000003276Bj2zA7"},
+  {d:"2026-07-17",tag:"드론",src:"국토교통부",nm:"지역 맞춤형 UAM 시범사업 공모 — 접수 마감 7.28 (D-11)",
+   note:"광역지자체 대상 · 1개 사업 국비 최대 10억 · 민간 참여 컨소시엄 평가 항목 포함 — 지자체 파트너와 버티포트·기체 점검 파트로 즉시 참여 협의 필요. 8월 평가, 9월 최종 선정.",url:"https://www.newspim.com/news/view/20260526000203"},
+  {d:"2026-07-17",tag:"드론",src:"방위사업청 · 신속원",nm:"'26-1차 신속시범사업 예비 사업설명회 공고 (공고번호 2026-67호)",
+   note:"Top5 1순위 트랙의 공식 공고 확인 — 설명회 일정·수요신청 접수 기간 상세 확인 후 참석 필수 (한국무인기시스템 공지 게시).",url:"https://korea-uvs.org/notice/articles/view/tableid/notice/view_type/webzine/page/1/id/871"},
+  {d:"2026-07-16",tag:"드론",src:"국방부 · 2026 드론 공방전",nm:"드론 공방전 본선 진출 8개 팀 확정 (본선 9월 2주 포천)",
+   note:"영업 타깃 확정 — 드론: 프리뉴 / 파블로항공·심투리얼 / 디브레인 / 아쎄따·모빌리티원·에이럭스, 대드론 4개팀. 보고서 액션 「본선팀 verti-Pit 공급」 즉시 가동 가능.",url:"https://www.dtoday.co.kr/news/articleView.html?idxno=775544"},
+  {d:"2026-07-14",tag:"드론",src:"인천테크노파크(ITP) · 인천광역시",nm:"「2026년 드론 도시관리 실증(지정) 지원사업」 참여기업 모집",
+   note:"지자체 드론 실증 트랙 — verti-Pit 점검 인프라 연계 컨소시엄 참여 검토. 마감일은 공고문(PDF)에서 확인 필요.",url:"https://itp.or.kr"},
+  {d:"2026-07-14",tag:"드론",src:"우주항공청(KASA)",nm:"「임무수요기반 성층권 드론 실증 플랫폼 개발」 2단계 신규과제 공고",
+   note:"국가기관 드론 R&D — 성층권 장기체공 기체의 점검·신뢰성 영역 참여 가능성 검토. 접수 일정 공고문 확인 필요.",url:"https://www.kasa.go.kr"},
+  {d:"2026-07-13",tag:"드론",src:"항공안전기술원(KIAST) · 국토교통부",nm:"「2026년 드론 상용화 지원사업」 재안내 공고",
+   note:"국토부 3종 동시 공고(상용화·실증도시·군실증 협업) 중 하나 — 위플로 기진입 트랙. 재안내 게시 확인, 후속 일정 추적 필요.",url:"https://www.kiast.or.kr"}
+ ]
+};
+(function(){
+  const st=document.getElementById("mstat"), feed=document.getElementById("mfeed");
+  const n=MONITOR.items.length, has=n>0;
+  st.innerHTML=`
+    <div class="mcard"><span class="mk2">📢 신규 공고 여부</span>
+      <span class="mv ${has?'yes':'no'}"><span class="pulse ${has?'yes':'no'}"></span>${has?`있음 · ${n}건`:'없음'}</span>
+      <span class="md2">${has?'아래 피드에서 상세 확인':'마지막 점검에서 신규 공고 미발견'}</span></div>
+    <div class="mcard"><span class="mk2">🕐 마지막 점검</span>
+      <span class="mv"><span class="mono">${MONITOR.checked.split(" · ")[0]}</span></span>
+      <span class="md2">${MONITOR.checked.split(" · ")[1]||"자동 점검"}</span></div>
+    <div class="mcard"><span class="mk2">⏰ 점검 주기</span>
+      <span class="mv"><span class="mono">09시 · 14시</span></span>
+      <span class="md2">${MONITOR.next} — 결과는 유무 관계없이 기록</span></div>`;
+  const tagCnt={};MONITOR.items.forEach(i=>{tagCnt[i.tag]=(tagCnt[i.tag]||0)+1;});
+  const tagEmj={"드론":"🛩️","정비":"🔧","MRO":"🛠️"};
+  const maxC=Math.max(1,...Object.values(tagCnt));
+  document.getElementById("mtagchart").innerHTML=Object.entries(tagCnt).sort((a,b)=>b[1]-a[1]).map(([t,c])=>
+    `<div class="hb"><span class="hlb"><span class="emj">${tagEmj[t]||"📌"}</span>${t}</span><div class="htrack"><div class="hfill" style="width:${Math.round(c/maxC*100)}%"></div></div><span class="hval">${c}</span></div>`).join("");
+  feed.innerHTML = has ? MONITOR.items.map(i=>`<div class="mitem">
+      <span class="mtag ${/MRO|정비/.test(i.tag)?'mro':''}">${i.tag}</span>
+      <div><h4>${i.nm}</h4><div class="msrc">${i.src}</div><div class="mnote">${i.note}</div>
+        ${i.url?`<a href="${i.url}" target="_blank" rel="noopener" style="font-size:12px">공고 확인 →</a>`:''}</div>
+      <span class="mdt">${i.d}</span>
+    </div>`).join("")
+    : `<div class="mempty">현재 피드에 표시할 신규 공고가 없습니다 — 다음 점검(09시/14시)에서 자동 갱신됩니다.</div>`;
+})();
+
+(function(){const el=document.getElementById("hdrdata");if(el)el.textContent="데이터 "+MONITOR.checked.split(" (")[0].slice(5);})();
+
+/* ---------- 활성 마감 트래커 (마감 지난 항목은 자동 숨김) ---------- */
+const DEADLINES=[
+ {nm:"USSOCOM SBIR 26.BZ 제안 접수(미국)",s:"2026-07-22",e:"2026-08-19"},
+ {nm:"중기부 「모두의 챌린지-방산」 접수",s:"2026-07-16",e:"2026-08-04"},
+ {nm:"서울시 교량점검 로봇·드론 기술 공모",s:"2026-07-28",e:"2026-08-07"},
+ {nm:"중기부 하반기 혁신제품 신규 지정",s:"2026-07-10",e:"2026-08-10"}
+];
+(function(){
+  const host=document.getElementById("ddl"); if(!host)return;
+  const act=DEADLINES.map(x=>{
+    const s=new Date(x.s),e=new Date(x.e+"T23:59:59");
+    const pct=Math.min(100,Math.max(0,Math.round((TODAY-s)/(e-s)*100)));
+    const dl=Math.ceil((e-TODAY)/86400000);
+    return {...x,pct,dl};
+  }).filter(x=>x.dl>=0);
+  host.innerHTML=act.length?act.map(x=>`<div class="dd ${x.dl<=5?'hot':''}">
+    <span class="dn">${x.nm}</span><span class="dbadge">${x.dl===0?'D-DAY':'D-'+x.dl}</span>
+    <div class="db"><i style="width:${x.pct}%"></i></div>
+    <div class="dr"><span>${x.s.slice(5)} 개시</span><span>${x.pct}% 경과</span><span>${x.e.slice(5)} 마감</span></div>
+  </div>`).join(""):'<div class="mempty">현재 진행 중인 마감이 없습니다</div>';
+})();
+
+/* ---------- PIPELINE DATA ---------- */
+const TRACKS=[
+ {n:"신속시범사업 (’26-2차)",dept:"신속원·DAPA",p:3,st:"review",act:"무기체계 분류가 전제라 점검 솔루션 적합성 불확실 — 우선순위 하향(보고서 원평가 ★5). 전력지원체계·업체투자 R&D 경로를 우선 검토"},
+ {n:"대전 방산혁신클러스터 (드론특화)",dept:"방사청·대전",p:5,st:"new",act:"djdi.or.kr 회원사 등록 + KAIST 윤용진 교수 협업 — 본사 대전 입지 즉시 활용"},
+ {n:"우수상용품 시범사용",dept:"국방부·KIP",p:5,st:"new",act:"2026 상반기 신규 응모(KIP) — 가장 빠른 매출 전환 (3~6개월)"},
+ {n:"수출: USSOCOM·NATO NSN",dept:"해외 B2G",p:5,st:"new",act:"FSC 4920·6680 직접 목록화 → 12개월 로드맵 시작 — 시리즈B IR 핵심 자산"},
+ {n:"인증 통합 (NET·EPC·혁신제품)",dept:"공공조달",p:5,st:"new",act:"12개월 통합 로드맵 (NET 1.30 → EPC 3.16 → 혁신제품 6월) — 공공조달 자격 확보"},
+ {n:"방산혁신기업 100 (드론)",dept:"DAPA·KRIT",p:4,st:"active",act:"연차 평가·확장 사업 dossier 작성 (5년 50억 누적)"},
+ {n:"육군 교육사 후속 트랙",dept:"육군",p:4,st:"active",act:"전력지원체계 소요결정 → 무기체계 사업 전환 dossier (유효성 판정 보유)"},
+ {n:"국토부 드론실증도시",dept:"국토부",p:4,st:"active",act:"K-드론배송 안전성 연동 + KIAST 인증 표준 진입 (19지자체·38거점)"},
+ {n:"국토부 K-드론시스템·UAM",dept:"국토부",p:4,st:"active",act:"포터블 verti-Pit으로 K-UAM 인증 트랙 진입 (AAM WG 멤버)"},
+ {n:"KRIT 국방핵심기술",dept:"KRIT",p:4,st:"new",act:"AAM·드론 점검 특화연구실 컨소시엄 (KAIST 미래전략대학원 연계)"},
+ {n:"KRIT 국방ICT 신기술",dept:"KRIT",p:4,st:"new",act:"전력지원체계 신규품목 등록, 업체투자 R&D 검토"},
+ {n:"중기부 방산 스타트업 챌린지",dept:"중기부",p:4,st:"new",act:"1차 챌린지 우선 응모, 군 협업 트랙으로 진입"},
+ {n:"우수조달물품 + MAS + 벤처나라",dept:"조달청",p:4,st:"new",act:"NET 보유 + 시범사용 성공 시 특례(2/3) 진입 → MAS 종합쇼핑몰"},
+ {n:"19개 지자체 → 컨소시엄 격상",dept:"지자체",p:4,st:"active",act:"공급사 → 공동 응모 파트너 격상, 2027 드론실증도시 사전 준비"},
+ {n:"본사 대전 지역제한입찰",dept:"조달·대전",p:4,st:"active",act:"대전·세종 추정가 5억 미만 물품·용역 입찰 자격 즉시 활용"},
+ {n:"육군 동원전력사령부",dept:"육군",p:3,st:"new",act:"12개 예비군 부대 점검 시범 후 2030 전체 부대 확산 전략"},
+ {n:"해군 무인수상정 함상 점검",dept:"해군",p:3,st:"new",act:"한화시스템·LIG넥스원 컨소시엄 (함정 탑재형 verti-Pit)"},
+ {n:"과기부 AI 글로벌 빅테크",dept:"과기부",p:3,st:"new",act:"예지정비 AI 알고리즘 응모 (대덕연구개발특구 입주 매칭)"},
+ {n:"산업부 민군기술협력·이전",dept:"산업부",p:3,st:"new",act:"2026 착수 과제로 점검 솔루션 군용 이전 응모"},
+ {n:"중기부 초격차 스타트업",dept:"중기부",p:3,st:"review",act:"방산·드론 트랙 연계 응모 (검토 필요)"},
+ {n:"지역혁신클러스터 R&D (대전 1단계)",dept:"KIAT",p:3,st:"new",act:"KIAT 지역산업육성실(02-6009-3691) 매칭"},
+ {n:"고양시 드론앵커센터 / G-UTM",dept:"경기·고양",p:3,st:"new",act:"버티포트 점검·G-UTM 데이터 연동 MoU"},
+ {n:"드론작전사령부 후속 거버넌스",dept:"범정부 TF",p:3,st:"active",act:"범정부 드론 TF 키맨 식별, 연간 공동소요 R&D 정렬 (인프라 2곳)"},
+ {n:"공공조달 수의계약 (1억 이하)",dept:"조달청",p:3,st:"review",act:"NET·EPC·우수조달물품 보유 시 1억 이하 수의계약 직행 (추진 중)"},
+ {n:"국방인공지능기술연구원",dept:"ADD",p:3,st:"new",act:"드론 점검 데이터의 국방 AI 학습데이터 표준화 협업"},
+ {n:"공군 군수사령부",dept:"공군",p:2,st:"new",act:"MUAV·LUCAS 정비 SOP 표준화 협업 제안"},
+ {n:"과기부 무인이동체 후속",dept:"과기부",p:2,st:"new",act:"공공혁신조달 후속 트랙 신규 시행 시 즉시 응모"},
+ {n:"산업부 방위산업 시제품 기반",dept:"산업부",p:2,st:"new",act:"센서·부품 신뢰성 시험 무상 활용 (KTL·KETI)"},
+ {n:"충남·강원 UAM·방산 신규 진입",dept:"지자체",p:2,st:"new",act:"충남 태안 UAM 실증 + 강원 클러스터 유치 시 진입"}
+];
+const STLAB={active:"진입 / 자산 보유",new:"미진입",review:"검토·추진 중"};
+function deptEmoji(d){
+  if(/육군/.test(d))return "🪖"; if(/해군/.test(d))return "⚓"; if(/공군/.test(d))return "✈️";
+  if(/DAPA|방사청|신속원/.test(d))return "🎖️"; if(/KRIT/.test(d))return "🔬"; if(/ADD/.test(d))return "🤖";
+  if(/국토부/.test(d))return "🛩️"; if(/과기부/.test(d))return "🧪"; if(/산업부/.test(d))return "🏭";
+  if(/중기부/.test(d))return "🚀"; if(/조달/.test(d))return "🏛️"; if(/해외|B2G/.test(d))return "🌏";
+  if(/TF|범정부/.test(d))return "🤝"; if(/KIAT/.test(d))return "🧩"; if(/국방부|KIP/.test(d))return "🎖️";
+  return "🏙️";
+}
+function stars(p){let s="";for(let i=0;i<5;i++)s+=i<p?"★":"<span class='off'>★</span>";return s;}
+(function(){
+  const board=document.getElementById("board"), pf=document.getElementById("pf"), pc=document.getElementById("pcount");
+  const fStar=new Set(), fSt=new Set();
+  function render(){
+    const list=TRACKS.filter(t=>(!fStar.size||fStar.has(t.p))&&(!fSt.size||fSt.has(t.st)));
+    board.innerHTML=list.map(t=>`<article class="tk p${t.p}">
+      <div class="r1"><span class="dept"><span class="emj">${deptEmoji(t.dept)}</span> ${t.dept}</span><span class="stars">${stars(t.p)}</span></div>
+      <h4>${t.n}</h4>
+      <span class="st ${t.st}">${STLAB[t.st]}</span>
+      <p class="act">${t.act}</p>
+    </article>`).join("");
+    pc.textContent=`${list.length} / ${TRACKS.length} 트랙`;
+  }
+  pf.addEventListener("click",e=>{
+    const b=e.target.closest(".fbtn"); if(!b)return;
+    const on=b.getAttribute("aria-pressed")==="true"; b.setAttribute("aria-pressed",String(!on));
+    if(b.dataset.star){const v=+b.dataset.star; on?fStar.delete(v):fStar.add(v);}
+    if(b.dataset.st){on?fSt.delete(b.dataset.st):fSt.add(b.dataset.st);}
+    render();
+  });
+  render();
+})();
+
+/* ---------- CALENDAR DATA ---------- */
+const CAL=[
+ {mo:1,nm:"조달청 혁신제품 1차 신청",win:"1.6 ~ 2.3 (연장 2.28)",date:"2026-02-03",conf:true,ac:"방산혁신기업 100 R&D 결과물 기반 dossier"},
+ {mo:1,nm:"산업부 NET·NEP 인증 1회차",win:"~ 1.30 마감",date:"2026-01-30",conf:true,ac:"비접촉 자동점검 국내 최초성 입증 자료"},
+ {mo:1,nm:"국토부 드론실증도시·상용화 2026",win:"1.7 공고 / 2.5 접수",date:"2026-02-05",conf:true,ac:"19개 지자체 컨소시엄 + KIAST 표준 진입"},
+ {mo:1,nm:"드론작전사령부 폐지·개편 권고",win:"1월",conf:true,ac:"범정부 드론 TF 출범 대비 키맨 매핑"},
+ {mo:2,nm:"방산혁신기업 100 5차년도 신청",win:"2.25 ~ 4.7 (예측)",date:"2026-04-07",conf:false,ac:"기 선정사 → 차기 추가 응모 검토"},
+ {mo:2,nm:"과기부 우수연구개발 혁신제품 상반기",win:"2.5 공고 / 3.30 연장",date:"2026-03-30",conf:true,ac:"AI 예지정비 알고리즘 응모"},
+ {mo:2,nm:"국토부 민간중소형드론 군실증 (신규)",win:"2.23 MoU + 3종 공고",date:"2026-02-23",conf:true,ac:"민간 점검 솔루션 + 군 시범부대 매칭"},
+ {mo:3,nm:"중기부 EPC 성능인증 1차",win:"3.16 ~ 3.27 (SMPP)",date:"2026-03-27",conf:true,ac:"90일 발급 목표 — 6월 발급 → 우선구매"},
+ {mo:3,nm:"2026 드론 공방전 접수",win:"3.4 ~ 3.31",date:"2026-03-31",conf:true,ac:"드론팀 점검 파트너 또는 본선팀 솔루션 공급"},
+ {mo:3,nm:"범정부 드론 TF 출범",win:"3월",conf:true,ac:"6개 부처 + 합참 + 각 군 키맨 정렬"},
+ {mo:4,nm:"2026 드론 공방전 서면평가 결과",win:"4.10 · 21개팀 선발",date:"2026-04-10",conf:true,ac:"드론 11팀 + 대드론 10팀 영업 접촉"},
+ {mo:4,nm:"위플로 시리즈A 55억",win:"4.7",date:"2026-04-07",conf:true,ac:"회사 자산 확보 — IR 후속 준비"},
+ {mo:5,nm:"KRIT 국방핵심기술",win:"5.1 ~ 6.30 (예측)",date:"2026-06-30",conf:false,ac:"AAM·드론 점검 특화연구실 컨소시엄 (KAIST)"},
+ {mo:5,nm:"민군기술협력",win:"5월 (예측)",conf:false,ac:"이전사업 응모 + 산업부 트랙 연계"},
+ {mo:6,nm:"신속시범 26-2차 / 27-1차",win:"6.30 ~ 8월 (예측)",date:"2026-08-08",conf:false,ac:"「드론 부대 자동 점검 통합지원체계」 dossier"},
+ {mo:6,nm:"2026 드론 공방전 예선전",win:"6.10 ~ 6.12 · 포천 5군단",date:"2026-06-12",conf:true,ac:"예선팀 영업 + 본선팀 솔루션 공급 결정"},
+ {mo:7,nm:"국토부 지역 맞춤형 UAM 시범사업 공모",win:"5.29 ~ 7.28 접수",date:"2026-07-28",conf:true,ac:"광역지자체 컨소시엄 — 버티포트·기체 점검 파트 참여 협의"},
+ {mo:7,nm:"우수상용품 시범사용 2026 하반기",win:"~ 7월 (예측)",conf:false,ac:"verti-Pit 적합제품 신청 (KIP)"},
+ {mo:7,nm:"UWC 2026 무인이동체엑스포",win:"7월 코엑스 (예측)",conf:false,ac:"부스 참가 + 6개 부처 키맨 동시 노출"},
+ {mo:7,nm:"중기부 「모두의 챌린지-방산」 접수",win:"7.16 ~ 8.4",date:"2026-08-04",conf:true,ac:"50개사 · 최대 1억 협업자금 — K-Startup 누리집 응모"},
+ {mo:8,nm:"서울시 교량점검 로봇·드론 기술 공모",win:"~ 8.7",date:"2026-08-07",conf:true,ac:"비접촉 센서·AI 손상감지 응용 가능성 검토"},
+ {mo:8,nm:"중기부 하반기 혁신제품 신규 지정 접수",win:"~ 8.10",date:"2026-08-10",conf:true,ac:"신청 요건(중기부 R&D 이력) 확인 후 응모 — 12월 최종 지정"},
+ {mo:9,nm:"2026 드론 공방전 본선전",win:"9.10 ~ 9.12 · 포천 5군단",date:"2026-09-12",conf:true,ac:"본선 4 vs 4 결승 — 우승팀 정비 계약"},
+ {mo:10,nm:"신속시범 27-1차 사업자 선정",win:"10월 (예측)",conf:false,ac:"선정 결과 모니터링·후속 준비"},
+ {mo:11,nm:"고양시 드론·UAM 박람회 2026",win:"11월 킨텍스 (예측)",conf:false,ac:"verti-Pit 부스 + G-UTM MoU"},
+ {mo:12,nm:"방산혁신기업 100 5기 수여식",win:"12월 (예측)",conf:false,ac:"신규 21개사 + 위플로 후속 트랙 정렬"},
+ {mo:12,nm:"산업부 2027년 통합시행계획",win:"12월 공지",conf:false,ac:"차년도 R&D 우산 사전 분석"}
+];
+const MNAME=["","1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"];
+(function(){
+  const cal=document.getElementById("cal");
+  const curMo=TODAY.getFullYear()===2026?TODAY.getMonth()+1:(TODAY.getFullYear()<2026?0:13);
+  let html="";
+  for(let mo=1;mo<=12;mo++){
+    const items=CAL.filter(c=>c.mo===mo); if(!items.length)continue;
+    const isCur=mo===curMo;
+    html+=`<div class="mgroup"><div class="mlabel ${isCur?'cur':''}">${MNAME[mo]}<small>2026${isCur?' · 현재':''}</small></div><div class="mitems">`;
+    html+=items.map(c=>{
+      let past=mo<curMo, badge="";
+      if(c.date){
+        const dd=Math.round((new Date(c.date+"T23:59:59")-TODAY)/86400000);
+        if(dd<0){badge=`<span class="dcount done">경과</span>`;past=true;}
+        else if(dd===0){badge=`<span class="dcount soon">D-DAY</span>`;past=false;}
+        else if(dd<=30){badge=`<span class="dcount soon">D-${dd}</span>`;past=false;}
+        else {badge=`<span class="dcount ${dd<=60?'go':''}">D-${dd}</span>`;past=false;}
+      } else {
+        if(mo<curMo){badge=`<span class="dcount done">경과</span>`;past=true;}
+        else if(mo===curMo){badge=`<span class="dcount soon">이번 달</span>`;past=false;}
+        else {badge=`<span class="dcount">${MNAME[mo]}</span>`;past=false;}
+      }
+      return `<div class="ci ${c.conf?'':'pred'} ${past?'past':''}">
+        <span class="mk"></span>
+        <div><div class="nm">${c.nm}</div><div class="ac">${c.ac}</div></div>
+        <div class="rt"><span class="win">${c.win}</span>${badge}</div>
+      </div>`;
+    }).join("");
+    html+="</div></div>";
+  }
+  cal.innerHTML=html;
+})();
+
+
+/* ---------- 월간 달력 그리드 ---------- */
+(function(){
+  const grid=document.getElementById("mcGrid"); if(!grid)return;
+  // 이벤트 소스: CAL(date 보유) + DEADLINES 마감일
+  const evs={};
+  function add(dt,label,cls){(evs[dt]=evs[dt]||[]).push({label,cls});}
+  CAL.forEach(c=>{if(c.date)add(c.date,(c.conf?"":"(예측) ")+c.nm,(c.conf?"":"pred"));});
+  DEADLINES.forEach(x=>add(x.e,"⏰ 마감: "+x.nm,"due"));
+  let ym=[TODAY.getFullYear(),TODAY.getMonth()]; // [year, monthIdx]
+  const DOW=["일","월","화","수","목","금","토"];
+  function render(){
+    const [y,m]=ym;
+    document.getElementById("mcTitle").textContent=`${y}년 ${m+1}월`;
+    const first=new Date(y,m,1), start=first.getDay(), dim=new Date(y,m+1,0).getDate();
+    const dimPrev=new Date(y,m,0).getDate();
+    let html=DOW.map((d,i)=>`<div class="mcal-dow ${i===0?'sun':i===6?'sat':''}">${d}</div>`).join("");
+    const cells=Math.ceil((start+dim)/7)*7;
+    for(let i=0;i<cells;i++){
+      const dnum=i-start+1;
+      const out=dnum<1||dnum>dim;
+      const shown=out?(dnum<1?dimPrev+dnum:dnum-dim):dnum;
+      const dow=i%7;
+      let cls="mcal-cell"+(out?" out":"")+(dow===0?" sun":dow===6?" sat":"");
+      let evHtml="",dots="";
+      if(!out){
+        const key=`${y}-${String(m+1).padStart(2,"0")}-${String(dnum).padStart(2,"0")}`;
+        const today=TODAY.getFullYear()===y&&TODAY.getMonth()===m&&TODAY.getDate()===dnum;
+        if(today)cls+=" today";
+        const list=evs[key]||[];
+        list.slice(0,2).forEach(e=>{evHtml+=`<span class="mcal-ev ${e.cls}" title="${e.label.replace(/"/g,'')}">${e.label}</span>`;dots+=`<i class="${e.cls}"></i>`;});
+        if(list.length>2)evHtml+=`<span class="mcal-more">+${list.length-2}건</span>`;
+        if(dots)evHtml+=`<span class="dots" style="display:none">${dots}</span>`;
+      }
+      html+=`<div class="${cls}"><span class="dnum">${shown}</span>${evHtml}</div>`;
+    }
+    document.getElementById("mcGrid").outerHTML=`<div class="mcal-grid" id="mcGrid">${html}</div>`;
+  }
+  document.getElementById("mcPrev").addEventListener("click",()=>{if(ym[1]>0||ym[0]>2026){ym=ym[1]===0?[ym[0]-1,11]:[ym[0],ym[1]-1];render();}});
+  document.getElementById("mcNext").addEventListener("click",()=>{if(ym[1]<11||ym[0]<2026){ym=ym[1]===11?[ym[0]+1,0]:[ym[0],ym[1]+1];render();}});
+  render();
+})();
+
+/* ---------- ROADMAP DATA ---------- */
+const PHASES=[
+ {day:"Day 1–14",icon:"🧭",h:"트랙 매핑 확정 및 정보 흐름 구축",tasks:[
+   "위플로 내부 진행 트랙 5건(방산혁신기업 100·교육사 전투실험·국토부·드론작사 인프라·CES) 인수인계",
+   "부처별 공고 모니터링 시트 구축 — DAPA·KRIT·신속원·국토부·과기부·산업부·중기부·KIP 8개 채널",
+   "2025 하반기 우수상용품 시범사용 / 2026 상반기 응모 의사결정",
+   "’26-2차 신속시범사업 공모 일정 사전 확인 (신속원 chill@add.re.kr 사전접촉)",
+   "대전 방산혁신클러스터(djdi.or.kr) 회원사 등록 + 대전테크노파크 담당자 면담 일정 확정",
+   "KAIST 윤용진 교수(방산특화 개발연구소장) + 정재원 교수(을지연구소) 미팅 일정",
+   "19개 지자체 드론·UAM 담당 부서·핵심 담당자 매핑 시트 구축"]},
+ {day:"Day 15–45",icon:"📑",h:"응모 dossier 5건 동시 가동",tasks:[
+   "우수상용품 시범사용 적합제품 신청서",
+   "신속시범사업 수요신청서 (10p 이내)",
+   "KRIT 국방ICT 신기술 또는 전력지원체계 업체투자 R&D 제안",
+   "중기부 방산 스타트업 챌린지 응모",
+   "국토부 2026 드론실증도시 컨소시엄 (지자체 매칭)",
+   "인증 통합 트랙 가동 — 직접생산확인서 + 나라장터 물품등록 + 벤처나라 즉시 등록",
+   "중기부 성능인증(EPC) 1차 응모 (3.16~3.27, SMPP 온라인) → 90일 발급 목표",
+   "산업부 NET 인증 신청 준비 (KOITA, 1.30 마감) — 비접촉 자동점검 최초성 자료",
+   "대전 방산혁신클러스터 드론특화 개발비 지원 응모 (KAIST 컨소시엄 합류)",
+   "고양시 드론앵커센터·G-UTM 협업 MoU 추진 (경기 K-UAM 2단계 연계)"]},
+ {day:"Day 46–75",icon:"🪖",h:"군 사용자 트랙 확장",tasks:[
+   "육군 동원전력사령부 예비군 드론부대 점검 시범 제안",
+   "공군 군수사령부 MUAV·LUCAS 정비 협업 사전접촉",
+   "해군 무인전력(한화시스템·LIG넥스원) 함상 탑재형 verti-Pit 제안",
+   "범정부 드론 TF 키맨 식별 및 위플로 위치 정렬"]},
+ {day:"Day 76–90",icon:"🌏",h:"해외·수출 트랙 및 다음 분기 준비",tasks:[
+   "NSN 등록 12개월 로드맵 가동 — M1~M2: 표준자원관리부서·DTaQ 사전 협의 + CAGE 코드 신청",
+   "FSC 4920(항공기 정비장비) + FSC 6680(센서) 이중 분류 전략 사전 확정",
+   "SOCKOR(주한 미 특전사령부) 드론·무인기 점검 솔루션 시연 제안",
+   "WBE MoU 외 NUAIR·Skyports·Wisk 등 NASA AAM WG 멤버사 후속 협업",
+   "2026 무인이동체엑스포(7월) 부스 + 부처 동시 노출 전략 수립",
+   "90일 회고 + 다음 분기 5건 추가 사업 응모 dossier 백로그 작성"]}
+];
+(function(){
+  const KEY="weflo-roadmap-v1", host=document.getElementById("phases");
+  let state={}; try{state=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){state={};}
+  let total=0; PHASES.forEach((p,pi)=>p.tasks.forEach((_,ti)=>total++));
+  function id(pi,ti){return pi+"-"+ti;}
+  function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+  function refresh(){
+    let done=0; for(const k in state) if(state[k]) done++;
+    const pct=total?Math.round(done/total*100):0;
+    document.getElementById("rmPct").textContent=pct+"%";
+    document.getElementById("rmBar").style.width=pct+"%";
+    document.getElementById("rmStat").textContent=`${done} / ${total} 완료`;
+    PHASES.forEach((p,pi)=>{
+      let d=0; p.tasks.forEach((_,ti)=>{if(state[id(pi,ti)])d++;});
+      const el=document.getElementById("pc-"+pi); if(el)el.textContent=`${d}/${p.tasks.length}`;
+    });
+  }
+  host.innerHTML=PHASES.map((p,pi)=>`<div class="phase">
+    <div class="ph-h"><span class="day"><span class="pemj">${p.icon||""}</span>${p.day}</span><h4>${p.h}</h4><span class="pc" id="pc-${pi}"></span></div>
+    <div class="tasks">${p.tasks.map((t,ti)=>{
+      const cid=id(pi,ti),ck=state[cid]?"checked":"";
+      return `<div class="task ${ck?'done':''}" data-id="${cid}">
+        <input type="checkbox" id="cb-${cid}" ${ck}>
+        <label for="cb-${cid}">${t}</label></div>`;
+    }).join("")}</div></div>`).join("");
+  host.addEventListener("change",e=>{
+    const cb=e.target.closest("input[type=checkbox]"); if(!cb)return;
+    const row=cb.closest(".task"),cid=row.dataset.id;
+    state[cid]=cb.checked; row.classList.toggle("done",cb.checked); save(); refresh();
+  });
+  document.getElementById("rmReset").addEventListener("click",()=>{
+    if(!confirm("모든 체크 진척을 초기화할까요?"))return;
+    state={};save();
+    host.querySelectorAll("input[type=checkbox]").forEach(c=>c.checked=false);
+    host.querySelectorAll(".task").forEach(r=>r.classList.remove("done"));
+    refresh();
+  });
+  refresh();
+})();
+
+/* ---------- MANUALS ---------- */
+const MAN=[
+ {t:"⚡ 신속시범사업 (신속원·DAPA)",st:"★3 하향 · 참고",rows:[
+   ["개요","시제품 2년 이내 신속 R&D로 군 활용성 확인. 사업비 500억 미만/사업당. TRL 7~8 점검 솔루션의 군용 전환 최적 트랙"],
+   ["자격","산업체·학계·연구기관 (무기체계 분류 가능 시제 보유)"],
+   ["사전준비","수요신청서(10p)·무기체계 분류 검토·사업비 100~300억 산정·신속원 PM 사전접촉(chill@add.re.kr)"],
+   ["평가","수요신청 → 실무검토 → 대상사업 선정 → 경쟁입찰 → 협약 (선정 ≠ 수주)"],
+   ["사후","2년 시제 후 군 활용성 적합 판정 → 정식 무기체계 사업 전환"],
+   ["대안","안보현안 긴급 트랙(방사청장 승인 시 별도 공모 없이 선정 가능)"]]},
+ {t:"🌏 NSN 등록 (해외 B2G 수출)",st:"★5 · 미진입",rows:[
+   ["개요","NATO 재고번호(NSN) 부여 → NSPA·USSOCOM·DLA eMall 진입. 시리즈B IR 핵심 자산"],
+   ["경로","CAGE 코드 → STANAG 4177 → NCB 부여 → NSPA(NMCRL) 등재"],
+   ["분류","FSC 4920(항공기 정비장비) + FSC 6680(센서) 이중 분류 전략"],
+   ["사전준비","방사청 표준자원관리부서·DTaQ 사전 협의, KDSIS 직접 목록화"],
+   ["진입","USSOCOM SOFWERX(비전통 공급사)·DSIP SBIR/STTR 병행"],
+   ["사후","NATO 30개국 공통 군수 자산화 → 영업비용 80%+ 절감"]]},
+ {t:"📜 인증 통합 12개월 로드맵",st:"★5 · 미진입",rows:[
+   ["개요","NET → EPC → 우수조달물품 → MAS 순차 확보로 공공조달 자격 완성"],
+   ["시퀀스","NET 1.30 신청 → EPC 3.16 응모(90일 발급) → 우수조달물품 6월 → MAS 종합쇼핑몰"],
+   ["효과","NET 보유 + 시범사용 성공 시 특례(2/3) 진입, 1억 이하 수의계약 직행"],
+   ["사전준비","비접촉 자동점검 국내 최초성 입증 자료(NET), 직접생산확인서·나라장터·벤처나라 등록"],
+   ["채널","nepmark.or.kr · smpp.go.kr · pps.go.kr · venturenara.g2b.go.kr"]]},
+ {t:"🎖️ 우수상용품 시범사용 (국방부·KIP)",st:"★5 · 미진입",rows:[
+   ["개요","「선 사용, 후 결정」 — 6개월 시범 → 3년 적합제품. 통과율 68%, 가장 빠른 군 도입(3~6개월)"],
+   ["자격","군수예산 조달 가능 물자·장비류 (verti-Pit 부합)"],
+   ["사전준비","8종 제출서류 + 대면평가 PT(군 적합성×기술 품질성×시장 혁신성)"],
+   ["평가","서류심사 → 대면평가(연 2회) → 현장실사(B등급↑) → 운용적합성. AA/A/BB/B 등급"],
+   ["핵심","교육사 전투실험 유효성 판정 인용 → BB 등급 이상 목표"],
+   ["사후","장관 명의 지정서 · 국방상용물자 전용몰 · 벤처나라 추천 · 우선구매"]]},
+ {t:"🏙️ 대전 방산혁신클러스터",st:"★5 · 미진입",rows:[
+   ["개요","본사 대전 입지 즉시 활용. 개발비·시험장비 수시 지원. 2028 방사청 대전 이전 대비 1순위 협력사 지위"],
+   ["사전준비","djdi.or.kr 회원사 등록 + 대전테크노파크 담당자 면담"],
+   ["협업","KAIST 윤용진 교수(방산특화 개발연구소) 컨소시엄 합류"],
+   ["연계","드론특화 개발비 지원 사업 응모, 지역혁신클러스터 R&D(KIAT)"],
+   ["전략","2기 클러스터 핵심 참여 → 대전 K-방산수도 핵심사"]]},
+ {t:"🔬 KRIT 국방핵심기술 과제공모",st:"★4 · 미진입",rows:[
+   ["개요","무기체계 R&D 핵심기술 사전 확보. 기초연구·특화연구실·특화연구센터·국제공동연구"],
+   ["일정","매년 5~6월 공모 (PMS pms.krit.re.kr)"],
+   ["시나리오","AAM·드론 점검·신뢰성·예지정비 특화연구실 컨소시엄 (KAIST 미래전략대학원)"],
+   ["병행","국방ICT 신기술 + 업체투자 R&D(전력지원체계) 다층 진입"],
+   ["채널","inno@krit.re.kr · 방위산업전략팀 042-259-9830"]]}
+];
+(function(){
+  document.getElementById("manuals").innerHTML=MAN.map((m,i)=>`<details class="acc">
+    <summary><span class="idx">${String(i+1).padStart(2,"0")}</span><h4>${m.t}</h4><span class="st">${m.st}</span><span class="arw">▶</span></summary>
+    <div class="body"><dl>${m.rows.map(r=>`<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join("")}</dl></div>
+  </details>`).join("");
+})();
+
+
+/* ---------- WEFLO WATCH (모니터링 자동 갱신 영역) ---------- */
+const WWATCH={
+ checked:"2026-08-12 14:03 (KST) · 정기 점검",
+ kr:[{d:"08-06",co:"사업",nm:"위플로, 국방 부품·소재 전시 참가 소식 공식 게시 — 방산 조달 접점 확대 (상세 일정은 공식 페이지 확인)",url:"https://weflo.ai/en/article/news/90"},{d:"08-04",co:"미디어",nm:"위플로 공식 뉴스레터 WAFFLE 2호 — 2분기 성과 정리(자체 발행)",url:"https://weflo.stibee.com/p/5"},
+  {d:"07말",co:"선정",nm:"조달청 '혁신 프리미어 1000' 선정 — 국방용 무인기 점검 기술력 인정. 혁신제품 지정 심사 우대 등 공공조달 트랙(제15장) 직결 자산",url:"https://www.venturesquare.net/1102243"},
+  {d:"최근",co:"MoU",nm:"자동차융합기술원(전북)과 협력 — 전북 미래항공모빌리티(UAM·드론·피지컬AI) 실증 확대",url:"https://www.venturesquare.net/1083491"},
+  {d:"04-07",co:"투자",nm:"시리즈A 55억 원 유치 — 누적 118억, AI 예지정비·방산·글로벌 확장 (스톤브릿지 후속 참여)",url:"https://wowtale.net/2026/04/07/256682/"},
+  {d:"최근",co:"협력",nm:"쏘카와 차량 점검 기술 MoU · 고흥군 드론배송 컨소시엄(마린로보틱스·호그린에어·전남TP) 참여",url:"https://thevc.kr/weflo"},
+  {d:"25-02",co:"선정",nm:"방산혁신기업 100 선정 (드론 분야) — 5년 최대 50억 R&D 지원",url:"https://weflo.ai/article/news/80"}
+ ],
+ gl:[{d:"08-09",co:"수상",nm:"가트너 'Physical AI 최다 투자 스타트업' 보고서에 한국 기업 중 유일하게 선정 — 드론 부문 투자규모 상위 9개사 (기사)",url:"https://www.theinvestor.co.kr/article/10586998"},
+  {d:"06-08",co:"미디어",nm:"Korea JoongAng Daily — \"드론계의 자동 피트크루\" 위플로 집중 조명 기사",url:"https://www.pressreader.com/korea-republic/korea-joongang-daily/20260608/281612427082906"},
+  {d:"05-19",co:"파트너십",nm:"Korea Times — 우크라·이란전 이후 스마트 드론 운용 조명. 미국 L2 Aviation·오거스타 공항·NASA/조지아 AAM WG 파트너십 확인",url:"https://www.koreatimes.co.kr/amp/business/companies/20260519/after-wars-in-ukraine-and-iran-weflo-steps-up-to-enable-smarter-drone-use"},
+  {d:"04-07",co:"투자",nm:"WOWTALE(영문) — Series A $3.65M 글로벌 보도: 방산·글로벌 모빌리티 AI 진단 확장",url:"https://en.wowtale.net/2026/04/07/233825/"},
+  {d:"25-01",co:"수상",nm:"CES 2025 혁신상 — Verti-Pit Mini 공식 Honoree 등재",url:"https://www.ces.tech/ces-innovation-awards/2025/verti-pit-mini/"}
+ ]
+};
+(function(){
+  const row=i=>`<div class="cn"><span class="cd">${i.d}</span><div><span class="cco">${i.co}</span><div class="cnm">${i.nm}</div><a href="${i.url}" target="_blank" rel="noopener">원문 보기 →</a></div></div>`;
+  document.getElementById("wwkr").innerHTML=WWATCH.kr.map(row).join("");
+  document.getElementById("wwgl").innerHTML=WWATCH.gl.map(row).join("");
+  document.getElementById("wwcnt").textContent=(WWATCH.kr.length+WWATCH.gl.length)+"건";
+  document.getElementById("wwchk").textContent=WWATCH.checked.split(" · ")[0];
+})();
+
+/* ---------- COMPANY NEWS (모니터링 자동 갱신 영역) ---------- */
+const CNEWS={
+ kr:[{d:"08-08",co:"니어스랩",nm:"코스닥 IPO 기관 수요예측 돌입 — 희망 공모가 3.0만~4.12만원, 삼성증권 주관. 풍력 점검 드론에서 대드론(KAiDEN)·군집 자폭(XAiDEN)으로 방산 확장 (기사)",url:"https://www.newspim.com/news/view/20260806000919"},{d:"08-07",co:"프리뉴",nm:"육군 교육용 상용 드론 구매사업 최종 공급기업 선정 — 연말까지 3,792대 순차 납품. 대규모 군 훈련용 기단 형성 = 정비·점검 수요 직결 (기사)",url:"https://www.hellot.net/news/article.html?no=114140"},
+  {d:"최근",co:"위플로",nm:"자동차융합기술원(전북)과 MoU — 전북 미래항공모빌리티(UAM·드론·피지컬AI) 실증 확대",url:"https://www.venturesquare.net/1083491"},
+  {d:"07-16",co:"프리뉴·파블로항공 외",nm:"2026 드론 공방전 본선 8개팀 확정 — 9월 포천 본선 (verti-Pit 영업 타깃)",url:"https://www.dtoday.co.kr/news/articleView.html?idxno=775544"},
+  {d:"07-15",co:"대한항공",nm:"드론·UAM 박람회에서 AI 무인기·로봇 기반 디지털 MRO 체계 공개",url:"https://www.hankyung.com/article/202607156739g"},
+  {d:"07-14",co:"위플로",nm:"쏘카와 차량 점검 기술 MoU · 고흥군 드론배송 컨소시엄(마린로보틱스·호그린에어) 참여",url:"https://thevc.kr/weflo"}
+ ],
+ us:[{d:"08-12",co:"Zipline",nm:"클리블랜드 클리닉과 美 의료시스템 최초 장기 처방약 드론 배송 개시(오하이오 비치우드) — Zipline 미국 일일 배송이 전체 물량의 70% 도달, 다음은 오스틴 확장",url:"https://newsroom.clevelandclinic.org/2026/08/03/cleveland-clinic-launches-drone-delivery-program-for-prescription-medications"},{d:"08-09",co:"미·한 정책",nm:"한미 '드론 동맹' 합의 — 공동 공급망 구축·상호운용 공통표준 수립 추진. 위플로 미국 진출의 제도적 순풍 (기사)",url:"https://www.stripes.com/theaters/asia_pacific/2026-05-19/drone-alliance-south-korea-21725165.html"},{d:"08-08",co:"AeroVironment",nm:"美 육군, 대드론 레이저 'Locust' 약 $400M 첫 대규모 양산 배치 결정 (8/7 보도) — 앞서 7월 P550 eVTOL 82대 $117M·대드론 체계 $500M 수주 (기사)",url:"https://www.armyrecognition.com/news/army-news/2026/us-army-awards-117m-contract-for-82-aerovironment-p550-evtol-drones-in-first-full-rate-production"},{d:"08-07",co:"Skydio",nm:"美 공군과 초기 계약 2건 체결 — 항공전술통제반(TACP)·폭발물처리(EOD) 부대에 자율 드론 배치 확대",url:"https://www.skydio.com/blog/USAF-Awards-Skydio-Initial-Contracts-to-Bring-Advanced-Autonomy-to-Mission-Critical-specialties"},{d:"08-07",co:"Anduril",nm:"자율 공격 로터크래프트 'Thunder' 공개(판버러 에어쇼) — Archer Aviation 협력 하이브리드 틸트로터, 아파치 편대 화력 3배 구상 (기사)",url:"https://www.defensenews.com/industry/techwatch/2026/07/20/thunderstruck-anduril-unveils-autonomous-attack-rotorcraft/"},{d:"08-06",co:"Zipline·업계",nm:"美 DOT, BVLOS 최종 규정 지연은 '의도적' — Zipline \"불확실성이 드론 투자 동결\" 경고. 규정 확정 시 점검 인프라 수요 본격화 (기사)",url:"https://dronexl.co/2026/08/01/dot-bvlos-delay-deliberate-zipline-investment/"},{d:"08-05",co:"Skydio",nm:"미국 내 드론 제조에 $3.5B 투자·5,000개 일자리 확약 — 리쇼어링 가속, 누적 고객 비행 500만회 돌파",url:"https://www.prnewswire.com/news-releases/skydio-commits-3-5-billion-to-expand-us-manufacturing-and-secure-american-drone-leadership-302752473.html"},{d:"08-04",co:"Anduril·OpenAI",nm:"기지 방어용 대드론(C-UAS)에 OpenAI 모델 활용 협력 발표 — 미군 기지 드론 위협 대응 (기사)",url:"https://www.yahoo.com/news/anduril-openai-join-boost-counter-150008727.html"},]
+};
+(function(){
+  const row=i=>`<div class="cn"><span class="cd">${i.d}</span><div><span class="cco">${i.co}</span><div class="cnm">${i.nm}</div><a href="${i.url}" target="_blank" rel="noopener">기사 보기 →</a></div></div>`;
+  document.getElementById("cnkr").innerHTML=CNEWS.kr.map(row).join("")||'<div class="mempty">아직 수집된 소식이 없습니다</div>';
+  document.getElementById("cnus").innerHTML=CNEWS.us.map(row).join("")||'<div class="mempty">아직 수집된 소식이 없습니다</div>';
+})();
+
+/* ---------- PARTNERS DATA ---------- */
+const COMPANIES=[
+ {g:"체계 대기업 (방산·항공)",emj:"🏢",items:[
+  {n:"한화시스템 · 한화에어로스페이스",url:"https://www.hanwhasystems.com",tag:"파트너",d:"위플로의 모기업 출신(사내벤처 분사). LUCAS 저비용 무인기·해령 USV 등 무인체계 주도",link:"무인기 정비 패키지 컨소시엄 — 기술교류 채널 기확보, 가장 가까운 체계 파트너"},
+  {n:"LIG넥스원",url:"https://www.lignex1.com",tag:"파트너",d:"해검 무인수상정, 드론 유도탄(L-MDM), AI 군집 자폭드론 통제 기술",link:"함정 탑재형 verti-Pit 컨소시엄 후보 (보고서 제8장 해군 트랙)"},
+  {n:"KAI (한국항공우주산업)",url:"https://www.koreaaero.com",tag:"파트너",d:"KUS-FC/LW 무인편대기 — 2027 유무인 합동작전 시험 예정",link:"무인편대기 정비 SOP·점검 자동화 미공급 영역 — 선점 기회"},
+  {n:"대한항공",url:"https://www.koreanair.com",tag:"경쟁·협력 ⚠️",d:"MUAV 중고도 무인기 제조 + 인스펙션 드론·로봇 기반 디지털 MRO 자체 구축 중",link:"MRO 데이터 표준 협력 여지 있으나 자체 정비 역량 보유 — 경쟁 관찰 대상"},
+  {n:"풍산",url:"https://www.poongsan.co.kr",tag:"고객 후보",d:"탄약 명가 — 수류탄·성형작약탄 결합 전투드론 MCD 시리즈 전개",link:"소모성 전투드론의 발사 전 신뢰성 점검 수요 — 불발·오작동 방지 QC 파트너 제안"},
+  {n:"현대차그룹 (슈퍼널)",url:"https://www.supernal.aero",tag:"파트너",d:"AAM 기체 개발 — 미국 중심, K-UAM 참여",link:"NASA AAM WG 동일 생태계 — UAM 기체 점검 표준 협력 후보"}]},
+ {g:"전문 제조·스타트업",emj:"🛩️",items:[
+  {n:"프리뉴",tag:"고객 후보",d:"국산 상용드론 제조 — 2026 드론 공방전 본선 진출 (드론 부문)",link:"공방전 본선팀 — verti-Pit 공급 영업 1순위 타깃"},
+  {n:"파블로항공",url:"https://www.pabloair.com",tag:"고객 후보",d:"군집비행·드론배송 + PabloM 방산 라인업(정찰·자폭·요격) — 공방전 본선(심투리얼 컨소)",link:"배송·군집 운용사 — 다수 기체 정기 점검 수요 큼"},
+  {n:"두산모빌리티이노베이션",tag:"고객 후보",d:"수소연료전지 파워팩 드론 — 신속시범획득 1호 사례 기업",link:"수소 파워팩 특화 점검 프로토콜 공동 개발 여지"},
+  {n:"유콘시스템",tag:"고객 후보",d:"대전 소재 군용 정찰드론(리모아이) 제조 — 군 납품 실적 다수",link:"같은 대전 클러스터 — 군용 기체 점검 번들링 최적 후보"},
+  {n:"디브레인 · 아쎄따 · 에이럭스",tag:"고객 후보",d:"2026 드론 공방전 본선 진출 드론팀 (모빌리티원 컨소 포함)",link:"본선 8팀 전원이 9월 본선 전 점검 수요 보유"},
+  {n:"니어스랩",url:"https://www.nearthlab.com",tag:"경쟁·인접 ⚠️",d:"AI 자율비행 점검드론(풍력·시설물) + 직충돌 요격드론",link:"'드론으로 시설물 점검' — 위플로('기체를 점검')와 방향은 다르나 고객군 겹칠 수 있음"},
+  {n:"유비파이",tag:"고객 후보",d:"요격 드론 — 공방전 대드론 본선(담스테크 컨소)",link:"고기동 요격기체의 반복 출격 점검 수요"}]},
+ {g:"대드론·부품·해외",emj:"🛡️",items:[
+  {n:"담스테크 · 알에프코어 · 동인광학",tag:"고객 후보",d:"2026 드론 공방전 대드론 부문 본선 컨소시엄 (탐지·재밍·광학)",link:"대드론 장비도 운용 점검 필요 — 본선 현장 접촉"},
+  {n:"WB Electronics (폴란드)",tag:"파트너 ✓",d:"WARMATE 자폭드론 제조사 — 위플로와 국내 유지정비 협력 MoU 기체결",link:"해외 제조사 정비 파트너 모델의 레퍼런스 — 국내 확산 템플릿"}]},
+ {g:"미국 주요 드론 기업 (수출 트랙 연계)",emj:"🇺🇸",items:[
+  {n:"Skydio",url:"https://www.skydio.com",tag:"파트너 후보",d:"미국 최대 드론 제조사 — AI 자율비행, 미군·공공기관 대량 납품 (DJI 대체 1순위)",link:"NSN·미군 조달 진입 시 기체 파트너 — 대규모 플릿의 자동 점검 인프라 수요"},
+  {n:"Anduril Industries",url:"https://www.anduril.com",tag:"파트너 후보",d:"방산 자율시스템 유니콘 — Ghost·Bolt 드론, Lattice AI 플랫폼, USSOCOM 계약 다수",link:"SOFWERX 생태계 핵심 — 소모성 자율기체의 신뢰성 점검 니즈"},
+  {n:"AeroVironment",url:"https://www.avinc.com",tag:"파트너 후보",d:"Switchblade 자폭드론·Puma 정찰드론 — 미군 소형드론 최대 공급사",link:"WBE(WARMATE) 정비 모델과 동일 구조 — 자폭드론 발사 전 점검 표준 제안 여지"},
+  {n:"Shield AI",url:"https://shield.ai",tag:"파트너 후보",d:"V-BAT 수직이착륙 무인기 + AI 파일럿(Hivemind)",link:"AI 자율기체의 비행 전 무결성 검증 — verti-Pit 데이터 연동 시나리오"},
+  {n:"Zipline · Wing",tag:"벤치마크",d:"세계 최대 드론 배송(짚라인 1억+ 마일) · Alphabet 배송 자회사",link:"국토부 K-드론배송의 글로벌 비교군 — 대규모 배송 플릿 점검 운영 모델 벤치마크"},
+  {n:"General Atomics · Kratos",tag:"모니터링",d:"MQ-9 대형 무인기 · XQ-58 발키리 무인전투기 — 대형 체계급",link:"장기 관찰 — LUCAS급 국내 무인전투기 정비 표준 논의 시 참고 체계"}]}
+];
+(function(){
+  const host=document.getElementById("pmap");
+  const tagCls=t=>/경쟁/.test(t)?"review":(/✓/.test(t)?"active":"new");
+  host.innerHTML=COMPANIES.map(gr=>`
+    <div class="sec-head"><h3>${gr.emj} ${gr.g}</h3><span class="rule"></span><span class="tag">${gr.items.length}개사</span></div>
+    <div class="board">${gr.items.map(c=>`<article class="tk ${tagCls(c.tag)==='active'?'p5':tagCls(c.tag)==='review'?'p2':'p4'}">
+      <div class="r1"><span class="dept">${c.tag}</span></div>
+      <h4>${c.n}</h4>
+      <p class="act" style="color:var(--ink-2)">${c.d}</p>
+      <p class="act" style="border-top:1px dashed var(--line);padding-top:8px"><b style="color:var(--accent-ink)">연계 →</b> ${c.link}</p>
+      <p style="margin-top:2px"><a href="${c.url||('https://search.naver.com/search.naver?query='+encodeURIComponent(c.n.split(' · ')[0]))}" target="_blank" rel="noopener" style="font-size:12px;font-weight:600">${c.url?'🔗 공식 홈페이지':'🔍 기업 상세 검색'} →</a></p>
+    </article>`).join("")}</div>`).join("");
+})();
+
+/* ---------- RESOURCES ---------- */
+const RES=[
+ ["방위사업청 신속시범","https://www.dapa.go.kr"],["국방기술진흥연구소 KRIT","https://www.krit.re.kr"],
+ ["KRIT PMS 과제관리","https://pms.krit.re.kr"],["기업마당(통합 공고)","https://www.bizinfo.go.kr"],
+ ["정책브리핑","https://www.korea.kr"],["국토교통부","https://www.molit.go.kr"],
+ ["항공안전기술원 KIAST","https://www.kiast.or.kr"],["육군 드론봇세계","https://www.dronebot.mil.kr"],
+ ["중소벤처기업부","https://www.mss.go.kr"],["위플로 공식","https://weflo.ai"],
+ ["우수상용품(KIP)","https://www.kip.re.kr"],["2026 드론 공방전","https://drbch-mil.com"],
+ ["국방표준정보 KDSIS","https://kdsis.dapa.go.kr"],["NATO NSPA","https://www.nspa.nato.int"],
+ ["USSOCOM SOFWERX","https://events.sofwerx.org"],["DSIP SBIR/STTR","https://www.dodsbirsttr.mil"],
+ ["조달청 혁신제품","https://pps.go.kr"],["나라장터 G2B","https://www.g2b.go.kr"],
+ ["벤처나라","https://venturenara.g2b.go.kr"],["성능인증 SMPP","https://www.smpp.go.kr"],
+ ["NEP/NET 인증","https://www.nepmark.or.kr"],["과기부 우수연구개발","https://www.skip.or.kr"],
+ ["대전 방산혁신클러스터","https://djdi.or.kr"],["대전테크노파크","https://www.daejeontp.or.kr"],
+ ["KIAT 지역혁신","https://www.kiat.or.kr"]
+];
+(function(){
+  document.getElementById("reslist").innerHTML=RES.map(r=>`<a class="res" href="${r[1]}" target="_blank" rel="noopener">
+    <span class="rn">${r[0]}</span><span class="ru">${r[1].replace('https://','')}</span></a>`).join("");
+})();
+</script>
+
+</body>
+</html>
