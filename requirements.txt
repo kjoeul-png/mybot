@@ -1,2 +1,3 @@
 python-telegram-bot==20.7
 anthropic==0.23.1
+SRTrain>=2.6.0

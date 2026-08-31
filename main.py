@@ -4,7 +4,11 @@ import anthropic
 from telegram import Update
 from telegram.ext import (
     Application, CommandHandler, MessageHandler,
-    filters, ContextTypes
+    CallbackQueryHandler, filters, ContextTypes
+)
+
+from srt_monitor import (
+    srt_command, srt_stop_command, srt_status_command, srt_button_handler
 )
 
 # ===== 로깅 설정 =====
@@ -43,6 +47,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "📄 파일 전송 → 파일 내용 분석/요약\n"
         "🖼 사진 전송 → 이미지 설명 요청 가능\n"
         "🔍 /search [검색어] → 정보 검색 및 요약\n"
+        "🚄 /srt → SRT 빈좌석 모니터링 + 자동 선점\n"
         "🗑 /clear → 대화 기록 초기화\n"
         "❓ /help → 도움말 보기\n\n"
         "무엇이든 물어보세요! 😊"
@@ -57,6 +62,9 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "✅ 파일 분석: 텍스트 파일(.txt, .csv, .py 등) 전송 시 내용 분석\n"
         "✅ 검색 요약: /search 날씨 또는 최신 뉴스 등\n"
         "✅ 번역: '다음을 영어로 번역해줘: ...' 형식으로 요청\n"
+        "✅ SRT 예매: /srt 수서 부산 20260905 1400 1800\n"
+        "   → 빈좌석이 나오면 자동 선점 후 결제 여부를 물어봐요\n"
+        "   (/srt_status 상태 확인, /srt_stop 중단)\n"
         "✅ 대화 초기화: /clear 입력\n\n"
         "💡 팁: 파일을 보낼 때 캡션으로 지시사항을 함께 적어주세요!\n"
         "예) '이 파일을 요약해줘', '오류를 찾아줘'"
@@ -249,6 +257,10 @@ def main():
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("clear", clear_command))
     application.add_handler(CommandHandler("search", search_command))
+    application.add_handler(CommandHandler("srt", srt_command))
+    application.add_handler(CommandHandler("srt_stop", srt_stop_command))
+    application.add_handler(CommandHandler("srt_status", srt_status_command))
+    application.add_handler(CallbackQueryHandler(srt_button_handler, pattern="^srt_"))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(MessageHandler(filters.Document.ALL, handle_document))
     application.add_handler(MessageHandler(filters.PHOTO, handle_photo))
