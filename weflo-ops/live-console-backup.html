@@ -980,6 +980,7 @@ footer b{color:var(--ink-2)}
         <ul>
           <li>방산혁신기업 100 — 위플로 선정은 <b>2024년 사이클</b>(2025.2.5 발표)로 확인된다. 본문 일부 ‘4기 선정(’25.12.16)’ 서술은 4기 수여식 일반 기술과 혼재될 수 있으니 <b>위플로 선정 기수·일자는 사내 기록으로 최종 확인</b> 권장.</li>
           <li><b>KPI 수치</b>(1년 R&D 100억 / 3년 500억 등)는 사업이사 첫 미팅에서 조정·합의할 <b>출발점</b> — R&D lead time(6~12개월)·인증 발급 시점에 따라 변동성이 크다(보고서 명시). 콘솔 진척 바는 0% 기준선으로 시작한다.</li>
+          <li><b>“19개 지자체·38개 거점·점검패드 N기” 실적 표기</b> — 전략보고서 v4 부록 A는 이 수치의 <b>공개 출처를 확인하지 못해 ‘주의’로 판정</b>했다(내부 증빙 확인 전 대외 사용 금지). 콘솔의 해당 표기는 인터뷰·보도 기반 참고치이므로, <b>대외 제출 문서에는 계약서·납품확인서 등 내부 증빙 확인 후에만 사용</b>한다.</li>
         </ul>
       </div></div>
 
@@ -1055,14 +1056,26 @@ const CURATED={
 };
 /* ---------- PINNED: 섹션별 '지금 볼 것' 핵심 N건 ----------
    순위 = 위플로 연관도(별점) 우선, 같으면 마감 임박순. 제목 클릭 시 원문으로 이동한다. */
+/* ---- D-DAY 실시간 재계산: 수집 시점에 고정된 dday를 열람 시점 기준으로 보정 ---- */
+(function(){
+  const now=new Date();
+  const fix=it=>{ if(it&&typeof it==="object"&&it.end){ const d=Math.floor((new Date(it.end+"T23:59:59")-now)/86400000); if(!isNaN(d)) it.dday=d; } };
+  try{
+    (AUTO.feed||[]).forEach(fix);
+    Object.values(AUTO.gov||{}).forEach(l=>Array.isArray(l)&&l.forEach(fix));
+    (CONTESTS.items||[]).forEach(fix);
+  }catch(e){}
+})();
+
 (function(){
   const stripDl=s=>String(s||"").replace(/\s*\((개찰|마감|오늘|D-)[^)]*\)\s*$/,"");
   const ddBadge=d=>{
     if(d===null||d===undefined) return `<span class="dcount">마감 미상</span>`;
+    if(d<0) return `<span class="dcount done">마감</span>`;
     return `<span class="dcount ${d<=7?'soon':'go'}">${d===0?"오늘 마감":"D-"+d}</span>`;
   };
   const rank=(a,b)=>(b.star||0)-(a.star||0)
-    || ((a.dday===null||a.dday===undefined?999:a.dday)-(b.dday===null||b.dday===undefined?999:b.dday));
+    || (((a.dday===null||a.dday===undefined||a.dday<0)?999:a.dday)-((b.dday===null||b.dday===undefined||b.dday<0)?999:b.dday));
 
   // items: [{nm,url,star,dday,why}]  — dday/why는 없으면 생략된다
   // presorted:true 이면 호출자가 정한 순서를 그대로 쓴다(마감 임박순 등)
@@ -1105,7 +1118,7 @@ const CURATED={
 
   const st=document.getElementById("mstat");
   const na=AUTO.feed.length, nc=CURATED.items.length;
-  const soon=AUTO.feed.filter(f=>f.dday!==null&&f.dday<=7).length;
+  const soon=AUTO.feed.filter(f=>f.dday!==null&&f.dday>=0&&f.dday<=7).length;
   st.innerHTML=`
     <div class="mcard"><span class="mk2">개찰 예정 관심 공고</span>
       <span class="mv ${na?'yes':'no'}"><span class="pulse ${na?'yes':'no'}"></span>${na?`${na}건 · 7일 내 ${soon}건`:'없음'}</span>
@@ -1179,7 +1192,7 @@ const CURATED={
   }).map(i=>{
     if(!i.end) return i;
     const dd=Math.round((new Date(i.end+"T00:00:00")-t0)/86400000);
-    return {...i, nm:`${i.nm} (마감 ${i.end.replace(/-/g,".")} · ${dd===0?"오늘 마감":"D-"+dd})`};
+    return {...i, nm:`${i.nm} (마감 ${i.end.replace(/-/g,".")} · ${dd<0?"마감":dd===0?"오늘 마감":"D-"+dd})`};
   });
   document.getElementById("mfeed").innerHTML = live.length ? live.map(mk).join("")
     : `<div class="mempty">진행 중인 큐레이션 항목이 없습니다.</div>`;
@@ -1229,6 +1242,7 @@ const CURATED={
   const mkContest=i=>{
     const dd=(i.dday===null||i.dday===undefined)?null:i.dday;
     const badge=dd===null?`<span class="dcount">마감 미상</span>`
+      :dd<0?`<span class="dcount done">마감</span>`
       :`<span class="dcount ${dd<=7?'soon':'go'}">${dd===0?"오늘 마감":"D-"+dd}</span>`;
     return `<div class="mitem">
       <span class="mtag ${/드론|국방|제조AI/.test(i.tag)?'mro':''}">${i.tag}</span>
@@ -1710,7 +1724,7 @@ const GOV=[
     if(!list.length) return `<dt>현재 과제</dt><dd style="color:var(--ink-3)">접수·개찰 진행 중인 수집 공고 없음 — 매일 자동 갱신</dd>`;
     return `<dt>현재 과제<br><span style="font-weight:400">(${list.length}건)</span></dt><dd><div style="display:flex;flex-direction:column;gap:7px">${list.map(g=>`
       <div style="line-height:1.45">${isNew(g.d)?'<span class="newpill">NEW</span>':''}<a href="${g.url}" target="_blank" rel="noopener" style="font-weight:600">${g.nm}</a>
-      <span style="font-family:var(--mono);font-size:11px;color:var(--ink-3);white-space:nowrap"> · ${g.org} · ${g.d||""}${g.dday!==null&&g.dday!==undefined?` · <b style="color:${g.dday<=7?'var(--crit)':'var(--ink-2)'}">D-${g.dday}</b>`:""} · <span class="mstars" style="font-size:10.5px">${"★".repeat(g.star)}<span class="off">${"★".repeat(5-g.star)}</span></span></span></div>`).join("")}</div></dd>`;
+      <span style="font-family:var(--mono);font-size:11px;color:var(--ink-3);white-space:nowrap"> · ${g.org} · ${g.d||""}${g.dday!==null&&g.dday!==undefined?(g.dday<0?` · <b style="color:var(--ink-3)">마감</b>`:` · <b style="color:${g.dday<=7?'var(--crit)':'var(--ink-2)'}">${g.dday===0?"오늘 마감":"D-"+g.dday}</b>`):""} · <span class="mstars" style="font-size:10.5px">${"★".repeat(g.star)}<span class="off">${"★".repeat(5-g.star)}</span></span></span></div>`).join("")}</div></dd>`;
   };
   const govPast=k=>{
     const list=(AUTO.govPast||{})[k]||[];
