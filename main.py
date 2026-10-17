@@ -33,8 +33,8 @@ BRIEFING_URL = os.environ.get(
 )
 # 수신 대상 채팅 ID (쉼표로 여러 개 가능). Render 환경변수에 설정 — /briefing 입력 시 자기 ID 확인 가능
 BRIEFING_CHAT_IDS = [c.strip() for c in os.environ.get('BRIEFING_CHAT_ID', '').split(',') if c.strip()]
-BRIEFING_HOUR = int(os.environ.get('BRIEFING_HOUR', 8))      # KST 기준 시
-BRIEFING_MINUTE = int(os.environ.get('BRIEFING_MINUTE', 0))  # KST 기준 분
+# 발송 시각(KST) — 쉼표로 여러 개. 기본: 출근 전 08:00 + 오후 업데이트 14:00
+BRIEFING_TIMES = [t.strip() for t in os.environ.get('BRIEFING_TIMES', '08:00,14:00').split(',') if t.strip()]
 KST = ZoneInfo('Asia/Seoul')
 
 # ===== Claude 클라이언트 =====
@@ -286,10 +286,10 @@ async def briefing_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if chat_id not in BRIEFING_CHAT_IDS:
         await update.message.reply_text(
             f"ℹ️ 이 채팅의 ID는 {chat_id} 입니다.\n"
-            f"매일 아침 자동 수신을 원하면 Render 환경변수에\n"
+            f"매일 자동 수신(08:00·14:00 KST)을 원하면 Render 환경변수에\n"
             f"BRIEFING_CHAT_ID={chat_id}\n"
-            f"를 추가하고 재배포하세요. (발송 시각 기본 08:00 KST, "
-            f"BRIEFING_HOUR/BRIEFING_MINUTE로 변경 가능)"
+            f"를 추가하고 재배포하세요. (발송 시각은 BRIEFING_TIMES로 변경 가능, "
+            f"기본 08:00,14:00)"
         )
 
 
@@ -319,15 +319,20 @@ def main():
     application.add_handler(MessageHandler(filters.Document.ALL, handle_document))
     application.add_handler(MessageHandler(filters.PHOTO, handle_photo))
 
-    # 매일 아침 브리핑 예약 (KST) — python-telegram-bot[job-queue] 필요
+    # 매일 브리핑 예약 (KST, 기본 08:00·14:00) — python-telegram-bot[job-queue] 필요
     if application.job_queue:
-        application.job_queue.run_daily(
-            morning_briefing_job,
-            time=datetime.time(hour=BRIEFING_HOUR, minute=BRIEFING_MINUTE, tzinfo=KST),
-            name="morning_briefing",
-        )
+        for t in BRIEFING_TIMES:
+            try:
+                hh, mm = (t.split(':') + ['0'])[:2]
+                application.job_queue.run_daily(
+                    morning_briefing_job,
+                    time=datetime.time(hour=int(hh), minute=int(mm), tzinfo=KST),
+                    name=f"briefing_{t}",
+                )
+            except ValueError:
+                logger.error(f"BRIEFING_TIMES 형식 오류: '{t}' (HH:MM 필요)")
         logger.info(
-            f"아침 브리핑 예약됨: 매일 {BRIEFING_HOUR:02d}:{BRIEFING_MINUTE:02d} KST, "
+            f"브리핑 예약됨: 매일 {', '.join(BRIEFING_TIMES)} KST, "
             f"대상 {len(BRIEFING_CHAT_IDS)}개 채팅"
         )
     else:
