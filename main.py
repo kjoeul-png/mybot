@@ -1,5 +1,9 @@
 import os
 import logging
+import datetime
+import urllib.request
+from zoneinfo import ZoneInfo
+
 import anthropic
 from telegram import Update
 from telegram.ext import (
@@ -19,6 +23,19 @@ TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
 CLAUDE_API_KEY = os.environ.get('CLAUDE_API_KEY')
 WEBHOOK_URL = os.environ.get('WEBHOOK_URL')  # Render.com에서 제공하는 URL
 PORT = int(os.environ.get('PORT', 8443))
+
+# ===== 아침 브리핑 설정 =====
+# 브리핑 원문: 매일 11:00 KST 라운드가 GitHub에 커밋하는 weflo-ops/daily-briefing.md
+BRIEFING_URL = os.environ.get(
+    'BRIEFING_URL',
+    'https://raw.githubusercontent.com/kjoeul-png/mybot/'
+    'claude/document-app-conversion-ue7rgt/weflo-ops/daily-briefing.md'
+)
+# 수신 대상 채팅 ID (쉼표로 여러 개 가능). Render 환경변수에 설정 — /briefing 입력 시 자기 ID 확인 가능
+BRIEFING_CHAT_IDS = [c.strip() for c in os.environ.get('BRIEFING_CHAT_ID', '').split(',') if c.strip()]
+# 발송 시각(KST) — 쉼표로 여러 개. 기본: 출근 전 08:00 + 오후 업데이트 14:00
+BRIEFING_TIMES = [t.strip() for t in os.environ.get('BRIEFING_TIMES', '08:00,14:00').split(',') if t.strip()]
+KST = ZoneInfo('Asia/Seoul')
 
 # ===== Claude 클라이언트 =====
 claude_client = anthropic.Anthropic(api_key=CLAUDE_API_KEY)
@@ -228,6 +245,54 @@ async def search_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"😥 검색 중 오류가 발생했습니다.\n{str(e)}")
 
 
+# ===== 아침 브리핑 =====
+def fetch_briefing() -> str:
+    """GitHub에 커밋된 최신 데일리 브리핑 원문을 가져온다."""
+    req = urllib.request.Request(BRIEFING_URL, headers={'User-Agent': 'weflo-briefing-bot'})
+    with urllib.request.urlopen(req, timeout=20) as resp:
+        return resp.read().decode('utf-8').strip()
+
+
+async def send_briefing_to(bot, chat_id: str):
+    text = fetch_briefing()
+    # 텔레그램 4096자 제한 — 4000자 단위 분할
+    chunks = [text[i:i+4000] for i in range(0, len(text), 4000)] or ["(브리핑 내용 없음)"]
+    for chunk in chunks:
+        await bot.send_message(chat_id=chat_id, text=chunk, disable_web_page_preview=True)
+
+
+async def morning_briefing_job(context: ContextTypes.DEFAULT_TYPE):
+    """매일 아침 BRIEFING_CHAT_ID 전원에게 최신 브리핑 발송."""
+    if not BRIEFING_CHAT_IDS:
+        logger.warning("BRIEFING_CHAT_ID 미설정 — 아침 브리핑 발송 대상 없음")
+        return
+    for chat_id in BRIEFING_CHAT_IDS:
+        try:
+            await send_briefing_to(context.bot, chat_id)
+            logger.info(f"아침 브리핑 발송 완료: {chat_id}")
+        except Exception as e:
+            logger.error(f"아침 브리핑 발송 실패 ({chat_id}): {e}")
+
+
+async def briefing_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """/briefing — 최신 브리핑 즉시 수신 + 자동수신 설정 안내."""
+    chat_id = str(update.effective_chat.id)
+    try:
+        await send_briefing_to(context.bot, chat_id)
+    except Exception as e:
+        logger.error(f"브리핑 조회 오류: {e}")
+        await update.message.reply_text(f"😥 브리핑을 가져오지 못했습니다.\n{str(e)}")
+        return
+    if chat_id not in BRIEFING_CHAT_IDS:
+        await update.message.reply_text(
+            f"ℹ️ 이 채팅의 ID는 {chat_id} 입니다.\n"
+            f"매일 자동 수신(08:00·14:00 KST)을 원하면 Render 환경변수에\n"
+            f"BRIEFING_CHAT_ID={chat_id}\n"
+            f"를 추가하고 재배포하세요. (발송 시각은 BRIEFING_TIMES로 변경 가능, "
+            f"기본 08:00,14:00)"
+        )
+
+
 # ===== /clear 명령어 =====
 async def clear_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
@@ -249,9 +314,29 @@ def main():
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("clear", clear_command))
     application.add_handler(CommandHandler("search", search_command))
+    application.add_handler(CommandHandler("briefing", briefing_command))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     application.add_handler(MessageHandler(filters.Document.ALL, handle_document))
     application.add_handler(MessageHandler(filters.PHOTO, handle_photo))
+
+    # 매일 브리핑 예약 (KST, 기본 08:00·14:00) — python-telegram-bot[job-queue] 필요
+    if application.job_queue:
+        for t in BRIEFING_TIMES:
+            try:
+                hh, mm = (t.split(':') + ['0'])[:2]
+                application.job_queue.run_daily(
+                    morning_briefing_job,
+                    time=datetime.time(hour=int(hh), minute=int(mm), tzinfo=KST),
+                    name=f"briefing_{t}",
+                )
+            except ValueError:
+                logger.error(f"BRIEFING_TIMES 형식 오류: '{t}' (HH:MM 필요)")
+        logger.info(
+            f"브리핑 예약됨: 매일 {', '.join(BRIEFING_TIMES)} KST, "
+            f"대상 {len(BRIEFING_CHAT_IDS)}개 채팅"
+        )
+    else:
+        logger.warning("JobQueue 미설치 — requirements.txt에 python-telegram-bot[job-queue] 필요")
 
     # Render.com 배포 시 Webhook 모드 / 로컬 테스트 시 Polling 모드
     if WEBHOOK_URL:
