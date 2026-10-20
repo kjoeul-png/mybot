@@ -354,6 +354,8 @@ footer b{color:var(--ink-2)}
 .apmeta b{color:var(--ink)}
 .apsrc{margin-top:7px;padding-top:6px;border-top:1px dashed var(--line);font-family:var(--mono);font-size:10px;color:var(--ink-3);line-height:1.5}
 .apsrc::before{content:"출처 · ";font-weight:700;color:var(--ink-2)}
+.apcard.chk::before{background:var(--line-2)}
+.apcard.chk .apmeta a{color:var(--accent-ink)}
 @media(max-width:600px){.bd-head h4{min-width:140px}.bd-when{white-space:normal}}
 
 /* v5 report chapter */
@@ -453,12 +455,10 @@ footer b{color:var(--ink-2)}
       </div>
     </div>
 
-    <div class="pin" style="margin-top:12px;border-left-color:var(--crit)">
-      <div class="ph"><span class="kk" style="color:var(--crit)">확인 요청</span><h4>⚠ 공개 링크가 없어 운영자 직접 확인이 필요한 건</h4><span class="cnt">확인되면 링크와 함께 ★5 보드로 승격, 아니면 삭제</span></div>
-      <ul class="v5ul" style="margin:6px 0 2px">
-        <li><b>공군 국방드론 통합관리체계</b> — 나라장터 공고번호 <b>R26BK01709906</b>(2026-09-04 자동수집). 공개 웹 링크 없음 → <a href="https://www.g2b.go.kr" target="_blank">나라장터(g2b.go.kr)</a>에서 공고번호로 조회·개찰일·수요부서 확인</li>
-        <li><b>방사청 docSeq=59315 '드론 설명회' 제보</b> — 공개·확장검색 확인 실패(10.20), BD 보드 '검증 필요' 상태. <a href="https://www.dapa.go.kr/dapa/doc/selectDoc.do?docSeq=59315&menuSeq=3031&bbsSeq=443" target="_blank">dapa 제보 링크</a> 원문 제목·내용 확인 후 판정</li>
-      </ul>
+    <div class="apcard chk" style="margin-top:12px">
+      <div class="aphead"><span class="apstage" style="background:var(--line);color:var(--ink-2)">⚠ 확인 요청</span><h4>공개 링크가 없어 운영자 직접 확인이 필요한 건</h4></div>
+      <div class="apmeta"><b>① 공군 국방드론 통합관리체계</b> — 나라장터 공고번호 R26BK01709906(2026-09-04 자동수집), 공개 웹 링크 없음 → <a href="https://www.g2b.go.kr" target="_blank">나라장터</a>에서 공고번호로 조회·개찰일 확인<br><b>② 방사청 docSeq=59315 '드론 설명회' 제보</b> — 공개·확장검색 확인 실패(10.20), BD '검증 필요' → <a href="https://www.dapa.go.kr/dapa/doc/selectDoc.do?docSeq=59315&menuSeq=3031&bbsSeq=443" target="_blank">dapa 제보 링크</a> 원문 확인 후 판정</div>
+      <div class="apsrc">확인되면 링크와 함께 ★5 보드로 승격, 아니면 삭제</div>
     </div>
 
     <div class="sec-head" style="margin-top:14px"><h3>주요 변경사항</h3><span class="rule"></span><span class="tag" id="chgTag"></span></div>
