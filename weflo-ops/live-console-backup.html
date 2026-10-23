@@ -344,6 +344,13 @@ footer b{color:var(--ink-2)}
   font-family:var(--mono);font-size:10.5px;color:var(--ink-3);line-height:1.55}
 .bd-src::before{content:"\cd9c\cc98 \b7  ";font-weight:700;color:var(--ink-2)}
 .bd-src a{color:var(--accent-ink)}
+.fhead{font-size:12px;font-weight:700;color:var(--ink-2);padding:6px 2px 8px;border-bottom:1px solid var(--line)}
+.fhead .mono{font-weight:500;color:var(--ink-3)}
+details.fold{margin:6px 0 2px}
+details.fold>summary{cursor:pointer;list-style:none;font-size:12px;color:var(--ink-3);padding:7px 10px;border:1px dashed var(--line-2);border-radius:8px}
+details.fold>summary::before{content:"▸ ";}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary .mono{color:var(--ink-2);font-weight:700}
 .apcard{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 15px 10px 18px;margin-bottom:10px;overflow:hidden}
 .apcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--amber)}
 .aphead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
@@ -420,7 +427,7 @@ footer b{color:var(--ink-2)}
       <ol>
         <li><span class="rk">★</span><div><span class="pt" style="font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4">조달청 137건 집행 종반 + 10.23(금) W43 마지막 영업일 — 주말 전 g2b '드론' 확인이 권장되는 날</span><div class="why">무엇이 바뀌었나 — 집행 기간(10.19~30) 후반, 10.23(금)이 W43 마지막 영업일이다. 공개 웹·집계사이트엔 10월 신규 드론 공고가 여전히 안 올라온다(나라장터 색인 지연 + 본 환경 g2b 차단). 10.26(월)은 WK 주간브리핑(W44) 재작성일. 10.22 신설한 '정부·지자체 드론 공고 섹터'도 공개 출처 확인분만 담겨 있어, 전수가 되려면 g2b 직접 열람분이 필요하다. 왜 중요한가 — 집행 기간 중 매일 드론·로봇·배터리 건이 풀릴 수 있는데, 공개 검색만으론 놓친다 — 전수 커버리지의 병목이 'g2b 접근'에 걸려 있다. 지금 할 행동 — ① 운영자가 g2b에서 '드론'·'무인기' 검색(공고일 10.19~) 결과 링크를 콘솔에 공유하면 드론 섹터에 즉시 반영 ② 맥 자동수집(9.29부터 정지) 재가동이 근본 해결 — ~/Weflo run_all.sh.</div></div><span class="rt2"></span></li>
         <li><span class="rk">1</span><div><span class="pt" style="font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4">로봇 부품주 — 로보티즈 중국 판매 확대 보도, 에스피지·삼현 '정식 수주 공시'는 아직 대기(11월 중순 3Q 분기보고서가 분수령)</span><div class="why">무엇이 바뀌었나 — 로보티즈가 액추에이터(다이나믹셀) 앞세워 중국 판매를 확대 중이라는 보도(9.22), 에스피지·삼현은 '북미 정식 수주 공시'가 아직 안 나와 11월 중순 3Q 분기보고서(법정기한 11.16 월 — 종전 표기 11.14는 토요일이라 정정)가 분수령이라는 증권가 시각이 유지된다. 10월 신규 공시는 없음(DART 기준 미확인). 왜 중요한가 — 국산 액추에이터·감속기의 '양산 수주'가 공시로 확정되는 시점이 EOL 검사 수요의 방아쇠 — 그 전에 접점을 만들어야 선점이 된다. 지금 할 행동 — 삼현 미팅 요청 10.23(금)까지 발송(미발송 시 10.26(월) 즉시)(양산 라인 EOL 검사 포함 여부). DART '단일판매·공급계약' 알림을 삼현·에스피지·로보티즈로 설정해 공시 즉시 포착.</div></div><span class="rt2"></span></li>
-        <li><span class="rk">2</span><div><span class="pt" style="font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4">콘솔 신뢰성 기준 재정비 완료 — 모든 항목 '출처 링크 필수', 미확인은 '확인 요청'으로 분리</span><div class="why">무엇이 바뀌었나 — 10.22 콘솔을 출처·링크 기준으로 전면 정비했다: 진행중 사업 전 항목에 클릭 링크, 미검증이던 docSeq=59315는 '검증 필요'로 강등, 공개 링크 없는 건(공군 통합관리체계 등)은 '확인 요청'으로 분리. 왜 중요한가 — 제안서·이사진 보고에 콘솔을 그대로 인용하려면 '모든 수치·공고에 확인 가능한 출처'가 전제다 — 상상·추정이 섞이면 전체 신뢰가 무너진다. 지금 할 행동 — 콘솔을 볼 때 출처 링크를 클릭해 원문 확인하는 습관. 미심쩍은 항목은 '이거 출처?'로 지적하면 당일 추적·정정. docSeq=59315 원문을 운영자가 확인해 판정. <b>10.23 전수 점검 결과</b> — 자동수집 피드·공모전의 D-day가 9.29 수집값 그대로 표시되던 오류(9.30 마감 건이 'D-1'로 잔존)를 열람 시점 재계산으로 교정, 해안정찰 VTOL 카드의 출처 연도(Janes 2021-09·뉴스레터 2025-03) 명시 및 '확인 요청' 이관, 교육용 드론 낙찰사명 '에이디시스템'으로 정정(머니투데이·헬로티 링크 추가). 링크 233개는 본 환경 차단으로 직접 열지 못해 검색 색인으로 존재만 교차확인 — 미확인 2건(경찰청 안티드론 차량·VTOL 2026 공고)은 확인 요청에 등재. <b>2차 점검(전 탭 사실검증, 10.23 오후)</b> — 11.14(토)로 적혀 있던 에스피지 3Q를 '11월 중순(법정기한 11.16)'으로, EPC 성능인증 발주처를 산업부·KTL→중기부·유통원으로, KIP '우수조달물품'→'우수상용품'으로, 드론센터 건을 D2B 긴급공고→국방부 연구용역으로, UWC 엑스포 7.22→8.25~27로, 드론특별자유화구역 3차를 2025년 지정으로, 삼현 양산 시점을 '26.12 초도 출하로, 혁신 프리미어 1000 주관을 관계부처 합동으로 정정. 11.2 창설의 10.13 국무회의 의결은 커뮤니티 출처뿐이라 '공식 보도 재확인' 표기. <b>자동수집 복구(10.23 저녁)</b> — 맥 전수수집은 맥북에서만 돌고 발행 세션이 9.16 끊겨 멈춘 것으로 확인. 클라우드는 수집 호스트가 차단돼 대신 돌릴 수 없어, 라운드마다 WebSearch로 찾은 공고를 '☁ 클라우드 검색수집'으로 00 피드에 쌓는다(전수 아님, 링크 필수). 오늘 5건 반영(충북대 휴머노이드 플랫폼 구매·동해항 안티드론 설계용역·국립소방연구원 드론 AI 용역 실재 확인 등).</div></div><span class="rt2"></span></li>
+        <li><span class="rk">2</span><div><span class="pt" style="font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4">콘솔 신뢰성 기준 재정비 완료 — 모든 항목 '출처 링크 필수', 미확인은 '확인 요청'으로 분리</span><div class="why">무엇이 바뀌었나 — 10.22 콘솔을 출처·링크 기준으로 전면 정비했다: 진행중 사업 전 항목에 클릭 링크, 미검증이던 docSeq=59315는 '검증 필요'로 강등, 공개 링크 없는 건(공군 통합관리체계 등)은 '확인 요청'으로 분리. 왜 중요한가 — 제안서·이사진 보고에 콘솔을 그대로 인용하려면 '모든 수치·공고에 확인 가능한 출처'가 전제다 — 상상·추정이 섞이면 전체 신뢰가 무너진다. 지금 할 행동 — 콘솔을 볼 때 출처 링크를 클릭해 원문 확인하는 습관. 미심쩍은 항목은 '이거 출처?'로 지적하면 당일 추적·정정. docSeq=59315 원문을 운영자가 확인해 판정. <b>10.23 전수 점검 결과</b> — 자동수집 피드·공모전의 D-day가 9.29 수집값 그대로 표시되던 오류(9.30 마감 건이 'D-1'로 잔존)를 열람 시점 재계산으로 교정, 해안정찰 VTOL 카드의 출처 연도(Janes 2021-09·뉴스레터 2025-03) 명시 및 '확인 요청' 이관, 교육용 드론 낙찰사명 '에이디시스템'으로 정정(머니투데이·헬로티 링크 추가). 링크 233개는 본 환경 차단으로 직접 열지 못해 검색 색인으로 존재만 교차확인 — 미확인 2건(경찰청 안티드론 차량·VTOL 2026 공고)은 확인 요청에 등재. <b>2차 점검(전 탭 사실검증, 10.23 오후)</b> — 11.14(토)로 적혀 있던 에스피지 3Q를 '11월 중순(법정기한 11.16)'으로, EPC 성능인증 발주처를 산업부·KTL→중기부·유통원으로, KIP '우수조달물품'→'우수상용품'으로, 드론센터 건을 D2B 긴급공고→국방부 연구용역으로, UWC 엑스포 7.22→8.25~27로, 드론특별자유화구역 3차를 2025년 지정으로, 삼현 양산 시점을 '26.12 초도 출하로, 혁신 프리미어 1000 주관을 관계부처 합동으로 정정. 11.2 창설의 10.13 국무회의 의결은 커뮤니티 출처뿐이라 '공식 보도 재확인' 표기. <b>자동수집 복구(10.23 저녁)</b> — 맥 전수수집은 맥북에서만 돌고 발행 세션이 9.16 끊겨 멈춘 것으로 확인. 클라우드는 수집 호스트가 차단돼 대신 돌릴 수 없어, 라운드마다 WebSearch로 찾은 공고를 '☁ 클라우드 검색수집'으로 00 피드에 쌓는다(전수 아님, 링크 필수). 오늘 5건 반영(충북대 휴머노이드 플랫폼 구매·동해항 안티드론 설계용역·국립소방연구원 드론 AI 용역 실재 확인 등). <b>전수수집 데이터 재검토 성과</b> — 9.29 수집분에 묻혀 있던 <b>해안정찰용무인항공기 2026 공고(방사청, 개찰 10.30, 2026EU100011001)</b>와 <b>ADD 무인기 임무모듈 시험 검증 장비(5.5억, 개찰 10.23)</b>를 찾아 ★5 보드·BD 보드에 올렸고, 🛰·🔎 표는 수집 데이터에서 드론·로봇 건을 자동 추출해 덧붙이도록 바꿨다(누락 방지).</div></div><span class="rt2"></span></li>
       </ol>
     </div>
 
@@ -444,9 +451,9 @@ footer b{color:var(--ink-2)}
         <div class="apsrc"><a href="https://www.mt.co.kr/article/2026062609491789440" target="_blank">머니투데이 — 국방드론본부 개편·드론 2만대 확보(2026-06-26)</a> · <a href="https://www.kdrm.kr/news/articleView.html?idxno=603040" target="_blank" rel="noopener">드론매거진 — 드작사 해체 후 국방드론본부 신설(2026-06-26 발표 보도)</a> · <a href="https://www.news1.kr/diplomacy/defense-diplomacy/6238508" target="_blank" rel="noopener">뉴스1 — 11월 출범·본부장 군무원 가능(2026-07-25)</a> · 11.2 창설일·10.13 국무회의 의결은 국방부 공식 보도/관보로 재확인 권장</div>
       </div>
       <div class="apcard">
-        <div class="aphead"><span class="apstars">★★★★★</span><h4>해안정찰용 무인항공기 (약 430억 · 육군·해병대)</h4><span class="apstage">공고 미확인 · 확인 요청</span></div>
-        <div class="apmeta">육군·해병대 감시정찰용 무인기 국내구매 사업, 예산 <b>약 430억</b>(2025-03-07자 국방 뉴스레터 수치 — 공식 문서 미확인). <b>수직이착륙(VTOL)</b>으로 좁은 평지 운용 가능, 1시간 이상 체공. 상위 흐름 — 2026-09-15 제178회 방추위가 '수직이착륙형 정찰용 무인항공기' 사업추진기본전략 수정안 의결('27~'36, 총 2조1,600억). ⚠ 2026년 입찰 공고는 10.23 검색으로 미확인 — 운영자 D2B 확인 요청. <b>위플로 관점</b> — 해안 상주 감시정찰 운용 = 반복 상태점검·배터리 관리·출동 전 점검 수요. (근거리정찰드론 사업 314.7억·유콘시스템 214세트와는 별개 건)</div>
-        <div class="apsrc"><a href="https://www.janes.com/defence-intelligence-insights/defence-news/air/south-korean-military-to-deploy-vtol-uavs-for-coastal-surveillance-and-reconnaissance" target="_blank">Janes(2021-09 보도) — 방사청 VTOL 무인기 군사적 활용성 판정·'22년부터 해안정찰 운용 결정 (현 사업과의 연결은 미확인)</a> · <a href="https://maily.so/sheldon/posts/l1zqvl4jr5x" target="_blank" rel="noopener">쉘든의 밀리터리 뉴스레터(2025-03-07) — 약 430억·육군·해병대 국내구매 (유료, 미리보기만 확인)</a> · <a href="https://www.finance-scope.com/article/view/scp202609150008" target="_blank" rel="noopener">파이낸스스코프 — 제178회 방추위 VTOL 정찰무인기 기본전략 수정 의결(2026-09-15)</a> · 공식 예산·공고 연도는 운영자 확인 필요</div>
+        <div class="aphead"><span class="apstars">★★★★★</span><h4>해안정찰용 무인항공기 (약 430억 · 육군·해병대)</h4><span class="apstage">공고 중 · 개찰 2026-10-30</span></div>
+        <div class="apmeta">육군·해병대 감시정찰용 무인기 국내구매 사업, 예산 <b>약 430억</b>(2025-03-07자 국방 뉴스레터 수치 — 공식 문서 미확인). <b>수직이착륙(VTOL)</b>으로 좁은 평지 운용 가능, 1시간 이상 체공. 상위 흐름 — 2026-09-15 제178회 방추위가 '수직이착륙형 정찰용 무인항공기' 사업추진기본전략 수정안 의결('27~'36, 총 2조1,600억). <b>2026 공고 확인(10.23)</b> — 나라장터 등록공고 <b>'해안정찰용무인항공기'</b>(방위사업청, 물품, 공고 2026-09-09, 공고번호 2026EU100011001, <b>개찰 2026-10-30</b>) — 9.29 전수수집 데이터에서 재검토 중 확인. 개찰 후 낙찰 기체사 = 점검 규격 협의 대상. <b>위플로 관점</b> — 해안 상주 감시정찰 운용 = 반복 상태점검·배터리 관리·출동 전 점검 수요. (근거리정찰드론 사업 314.7억·유콘시스템 214세트와는 별개 건)</div>
+        <div class="apsrc"><a href="https://www.janes.com/defence-intelligence-insights/defence-news/air/south-korean-military-to-deploy-vtol-uavs-for-coastal-surveillance-and-reconnaissance" target="_blank">Janes(2021-09 보도) — 방사청 VTOL 무인기 군사적 활용성 판정·'22년부터 해안정찰 운용 결정 (현 사업과의 연결은 미확인)</a> · <a href="https://maily.so/sheldon/posts/l1zqvl4jr5x" target="_blank" rel="noopener">쉘든의 밀리터리 뉴스레터(2025-03-07) — 약 430억·육군·해병대 국내구매 (유료, 미리보기만 확인)</a> · <a href="https://www.finance-scope.com/article/view/scp202609150008" target="_blank" rel="noopener">파이낸스스코프 — 제178회 방추위 VTOL 정찰무인기 기본전략 수정 의결(2026-09-15)</a> · <a href="https://www.g2b.go.kr/link/PNPE001_01" target="_blank" rel="noopener">나라장터 공고 2026EU100011001 (목록에서 검색)</a> · 예산 430억은 2025 뉴스레터 수치 — 공고 원문 금액 확인 권장</div>
       </div>
       <div class="apcard">
         <div class="aphead"><span class="apstars">★★★★★</span><h4>조달청 혁신제품 시범구매 — 휴대용 안티드론 포함</h4><span class="apstage">3차 선정 · 실증</span></div>
@@ -457,23 +464,19 @@ footer b{color:var(--ink-2)}
 
     <div class="apcard chk" style="margin-top:12px">
       <div class="aphead"><span class="apstage" style="background:var(--line);color:var(--ink-2)">⚠ 확인 요청</span><h4>공개 링크가 없어 운영자 직접 확인이 필요한 건</h4></div>
-      <div class="apmeta"><b>① 공군 국방드론 통합관리체계</b> — 나라장터 공고번호 R26BK01709906(2026-09-04 자동수집), 공개 웹 링크 없음 → <a href="https://www.g2b.go.kr" target="_blank">나라장터</a>에서 공고번호로 조회·개찰일 확인<br><b>② 방사청 docSeq=59315 '드론 설명회' 제보</b> — 공개·확장검색 확인 실패(10.20), BD '검증 필요' → <a href="https://www.dapa.go.kr/dapa/doc/selectDoc.do?docSeq=59315&menuSeq=3031&bbsSeq=443" target="_blank">dapa 제보 링크</a> 원문 확인 후 판정<br><b>③ 해안정찰용 VTOL 무인기(약 430억)</b> — 2026년 공고 여부 10.23 검색 미확인 → <a href="https://www.d2b.go.kr/index.do" target="_blank" rel="noopener">D2B</a>에서 '수직이착륙'·'감시정찰' 검색 후 결과 공유<br><b>④ 경찰청 안티드론 통합운용차량(8.5억)</b> — 집계사이트 링크 외 교차 출처 없음(10.23 재검색 실패) → <a href="https://todayjiwon.co.kr/procurement/36a4deda-0777-41bf-bfc8-257ffc70585d" target="_blank" rel="noopener">링크 열어 공고번호·개찰 확인</a></div>
+      <div class="apmeta"><b>① 공군 국방드론 통합관리체계</b> — 나라장터 공고번호 R26BK01709906(2026-09-04 자동수집), 공개 웹 링크 없음 → <a href="https://www.g2b.go.kr" target="_blank">나라장터</a>에서 공고번호로 조회·개찰일 확인<br><b>② 방사청 docSeq=59315 '드론 설명회' 제보</b> — 공개·확장검색 확인 실패(10.20), BD '검증 필요' → <a href="https://www.dapa.go.kr/dapa/doc/selectDoc.do?docSeq=59315&menuSeq=3031&bbsSeq=443" target="_blank">dapa 제보 링크</a> 원문 확인 후 판정<br><b>③ 경찰청 안티드론 통합운용차량(8.5억)</b> — 집계사이트 링크 외 교차 출처 없음(10.23 재검색 실패) → <a href="https://todayjiwon.co.kr/procurement/36a4deda-0777-41bf-bfc8-257ffc70585d" target="_blank" rel="noopener">링크 열어 공고번호·개찰 확인</a></div>
       <div class="apsrc">확인되면 링크와 함께 ★5 보드로 승격, 아니면 삭제</div>
     </div>
 
     <div class="sec-head" style="margin-top:20px"><h3>🛰 정부·지자체 드론 구매 공고 (전수)</h3><span class="rule"></span><span class="tag">드론·무인기·안티드론이 들어간 모든 기관·지자체 공고 · 공개 출처만(상상 금지) · 각 건 링크</span></div>
     <p class="psub" style="margin-bottom:10px">본 환경은 나라장터(g2b) 직접 접근이 차단돼 <b>공개 출처로 확인된 건만</b> 싣는다. <b>실시간 전수 목록은</b> ① 맥 자동수집(아래 '개찰 예정 관심 공고'에 드론 건 자동 적재) ② 운영자가 g2b에서 '드론' 검색한 결과 링크를 주면 이 표에 즉시 추가. 아래는 공개 확인분.</p>
-    <div class="v5wrap"><table class="v5t"><thead><tr><th>발주기관</th><th>공고명</th><th>금액</th><th>상태</th><th>확인</th></tr></thead><tbody>
-    <tr><td>한국국토정보공사(LX)</td><td>대형 회전익 멀티콥터 임차 용역</td><td>약 1.7억</td><td>마감 2026-07-01 종료</td><td><a href="https://www.sankun.com/bid-info/ASIjrgMcYrf9carl_W9HRTFUSM4sAQBXna-MpuHvBC4" target="_blank" rel="noopener">공고 정보(산군)</a></td></tr>
-    <tr><td>국방과학연구소(ADD)</td><td>드론 시스템 임차 (재공고)</td><td>약 2천만</td><td>마감 2026-06-26 종료 (R26BK01604663)</td><td><a href="https://www.sankun.com/bid-info/7VnCCOsehB8XI5-v7UDNPJaz8UaMZhxRsvC1Gz0ZcoA" target="_blank" rel="noopener">공고 정보(산군)</a></td></tr>
+    <div class="v5wrap"><table class="v5t"><thead><tr><th>발주기관</th><th>공고명</th><th>금액</th><th>상태</th><th>확인</th></tr></thead><tbody id="droneBuyTbody">
     <tr><td>보성군</td><td>청년농업인 드론방제 사업단 드론 구입</td><td>약 1.1억</td><td>개찰 2026-05-08 종료</td><td><span style="color:var(--ink-3)">g2b 조회 (산군 집계 확인)</span></td></tr>
     <tr><td>완주군</td><td>정밀농업분야 무인멀티콥터(드론) 구입 (재공고)</td><td>약 3,600만</td><td>개찰 2026-04-24 종료</td><td><a href="https://www.sankun.com/bid-info/35yGSLgUEbKTldqFoCCAzTS1TkgWR51nhysaorPfZ2k" target="_blank" rel="noopener">공고 정보(산군)</a></td></tr>
-    <tr><td>동해지방해양수산청</td><td>동해항 안티드론시스템 구축 설계 컨설팅 용역</td><td>약 1.3억</td><td>개찰완료(2026-05) · 낙찰 문엔지니어링 · 본사업 주시</td><td><a href="https://www.sankun.com/bid-info/-Eb0g1W0rT2Z59Oq0GOvymEECRPZczirNDFgr_7rKfU" target="_blank" rel="noopener">공고 정보(산군)</a></td></tr>
     <tr><td>육군사관학교 산학협력단</td><td>DJI 드론 구매</td><td>약 5,400만</td><td>마감 2026-06-30 종료</td><td><span style="color:var(--ink-3)">g2b 조회 (산군 집계 확인)</span></td></tr>
     <tr><td>홍천군</td><td>소방드론 지원사업 (드론 구입)</td><td>—</td><td>공고 2026-07-02 · 마감 7.08 종료</td><td><span style="color:var(--ink-3)">g2b 조회 (산군 집계 확인)</span></td></tr>
     <tr><td>원주시</td><td>농기계 이용 활성화 지원사업 드론 구입 (재공고)</td><td>약 3,200만</td><td>개찰 2026-07-02 종료 (R26BK01602918-001)</td><td><span style="color:var(--ink-3)">g2b 공고번호 조회</span></td></tr>
     <tr><td><b>경찰청</b></td><td>안티드론 통합운용차량 구매</td><td>8.5억</td><td>개찰 2026-09-15 종료 표기 · ⚠ 10.23 웹검색 교차확인 실패 — 링크 직접 확인 요청</td><td><a href="https://todayjiwon.co.kr/procurement/36a4deda-0777-41bf-bfc8-257ffc70585d" target="_blank">공고 열기</a></td></tr>
-    <tr><td>경복대 산학협력단</td><td>드론교육원 공용장비 드론 구입 (2026-46호)</td><td>—</td><td>공고번호 R26BK01747491</td><td><a href="https://www.g2b.go.kr/pn/pnp/pnpe/UntyAtchFile/downloadFile.do?bidPbancNo=R26BK01747491&bidPbancOrd=000&fileType=&fileSeq=3&prcmBsneSeCd=01" target="_blank">공고문</a></td></tr>
     <tr><td>전남소방본부</td><td>드론 출동시스템 구매·설치</td><td>약 3억</td><td>개찰 2026-06-12 종료 · 낙찰 에이블이엔씨</td><td><span style="color:var(--ink-3)">g2b 공고번호로 조회</span></td></tr>
     <tr><td>강남구</td><td>AI·드론 산불감시시스템 구축 물품구매</td><td>약 4.3억</td><td>마감 2026-07-06 (상태 재확인)</td><td><span style="color:var(--ink-3)">g2b 공고번호로 조회</span></td></tr>
     <tr><td>경북소방본부</td><td>소방드론 구매(수의계약)</td><td>약 7천만</td><td>개찰 2026-05-11 종료 · 낙찰 리하이</td><td><span style="color:var(--ink-3)">g2b 공고번호로 조회</span></td></tr>
@@ -482,7 +485,7 @@ footer b{color:var(--ink-2)}
 
     <div class="sec-head" style="margin-top:20px"><h3>🔎 사전 신호 — 공고 전 기회</h3><span class="rule"></span><span class="tag">사전규격공개·업체설명회·연구용역·국가/지자체 과제 (로봇·드론) · 공개 출처+링크만</span></div>
     <p class="psub" style="margin-bottom:10px">정식 입찰 <b>이전 단계</b>의 기회를 모은다. 특히 <b>사전규격공개</b>는 규격에 의견을 넣어 '점검·검사 조항을 심을' 수 있는 유일한 창(v4 원칙). 연구용역·국가/지자체 과제는 실증·레퍼런스의 입구다. 공개 링크 있는 건은 눌러 확인, <b>g2b 전용(사전규격 다수)</b>은 '조회'로 표기 — 전수는 운영자 g2b 열람·맥 자동수집으로 보강.</p>
-    <div class="v5wrap"><table class="v5t"><thead><tr><th>구분</th><th>건명</th><th>기관</th><th>상태</th><th>확인</th></tr></thead><tbody>
+    <div class="v5wrap"><table class="v5t"><thead><tr><th>구분</th><th>건명</th><th>기관</th><th>상태</th><th>확인</th></tr></thead><tbody id="preSignalTbody">
     <tr><td><b>사전규격공개</b></td><td>로봇·드론 사전규격 (상시 — 규격 의견 제출 창)</td><td>전 기관(나라장터)</td><td>g2b 전용 · 공개 링크 없음</td><td><a href="https://www.g2b.go.kr" target="_blank">g2b 사전규격 조회</a> '드론'·'로봇'</td></tr>
     <tr><td>업체설명회</td><td>방사청 docSeq=59315 '드론 설명회' 제보</td><td>방위사업청</td><td>공개 확인 실패 · 검증 대기</td><td><a href="https://www.dapa.go.kr/dapa/doc/selectDoc.do?docSeq=59315&menuSeq=3031&bbsSeq=443" target="_blank">dapa 제보 링크</a></td></tr>
     <tr><td>업체설명회</td><td>방사청 신속시범사업 설명회 — '27년 공모 절차·1:1 컨설팅 (9.18 양재 aT) / '26-1차 혁신 기술·장비 소개회 (9.17 창원)</td><td>방위사업청</td><td>종료 · '27-1차 공모 절차 주시</td><td><a href="https://www.segye.com/newsView/20260918504507" target="_blank" rel="noopener">세계일보(9.18)</a> · <a href="https://www.fnnews.com/news/202609180858361306" target="_blank" rel="noopener">파이낸셜뉴스(9.18)</a></td></tr>
@@ -522,6 +525,18 @@ footer b{color:var(--ink-2)}
 
     <div class="sec-head"><h3>결정 보드</h3><span class="rule"></span><span class="tag">2026-10-17 기준 · 개찰 임박순 아님 — 결정 유형순</span></div>
     <div>
+    <div class="bd-card c-bid">
+      <div class="bd-head"><span class="bdg bid">BID 후보</span><h4>무인기 임무모듈 시험 검증 장비 (국방과학연구소)</h4><span class="bd-when">개찰 10.23 <span class="dcount" data-due="2026-10-23"></span></span></div>
+      <p class="bd-why">'시험·검증 장비' 물품 공고(예산 5.5억, 일반경쟁) — 위플로의 본업(기체·모듈 상태 검증)과 가장 가까운 발주 유형. 이번 건은 개찰 당일 발견이라 응찰 불가, 낙찰사·규격서가 다음 회차의 교본</p>
+      <p class="bd-act">개찰 결과·낙찰사 확인 → 규격서(시험 항목·인터페이스) 입수 → ADD 임무모듈 시험 라인에 verti-Pit/DRQC 적용안 준비, 차기 유사 공고 즉시 BID</p>
+      <div class="bd-src">나라장터 등록공고 R26BK01715532 (국방과학연구소, 게시 2026-09-07, 물품 5.5억) — 9.29 전수수집 데이터에서 10.23 재검토 중 확인 · <a href="https://www.g2b.go.kr/link/PNPE027_01?bidPbancNo=R26BK01715532&bidPbancOrd=000" target="_blank" rel="noopener">공고 확인</a></div>
+    </div>
+    <div class="bd-card c-partner">
+      <div class="bd-head"><span class="bdg partner">PARTNER</span><h4>해안정찰용무인항공기 (방위사업청 · 국내구매)</h4><span class="bd-when">개찰 10.30 <span class="dcount" data-due="2026-10-30"></span></span></div>
+      <p class="bd-why">★5 진행 중 사업의 실제 2026 공고. 기체 입찰은 기체사 몫 — 낙찰 기체사의 납품 전 출하검사·운용 부대의 반복 점검 규격이 위플로 자리</p>
+      <p class="bd-act">10.30 개찰 결과·낙찰 기체사 확인 → 해안 상주 운용 점검 제안(배터리·구동계 상태진단) 접촉, 사업 예산·수량은 공고 원문으로 확정</p>
+      <div class="bd-src">나라장터 등록공고 2026EU100011001 (방위사업청, 게시 2026-09-09, 물품) — 9.29 전수수집 데이터에서 10.23 재검토 중 확인 · <a href="https://www.g2b.go.kr/link/PNPE001_01" target="_blank" rel="noopener">나라장터 목록에서 검색</a></div>
+    </div>
     <div class="bd-card c-observe">
       <div class="bd-head"><span class="bdg observe">검증 필요</span><h4>방사청 'docSeq=59315 드론 설명회' 제보 — 공개 확인 실패, 재검증 대기</h4><span class="bd-when">운영자 제보 2026-10-16 · <a href="https://www.dapa.go.kr/dapa/doc/selectDoc.do?docSeq=59315&menuSeq=3031&bbsSeq=443" target="_blank">제보 링크</a> · 공개·확장검색 재확인 실패 2026-10-20</span></div>
       <p class="bd-why"><b>⚠ 정정</b> — 운영자가 10.16에 docSeq=59315 링크를 '드론 업체설명회'로 제보해 등재했으나, 본 환경의 dapa 접근 차단 + 공개·확장 웹검색(10.20)으로 <b>해당 설명회의 존재·내용을 확인하지 못했다</b>. 공개 확인된 방사청 설명회류: 9.3 지휘통제정보공유체계 예비설명회(드론 아님), 9.17 창원 '26-1차 혁신 기술·장비 소개회, 9.18 양재 aT 신속시범사업 설명회('27 공모 절차·1:1 컨설팅, <a href="https://www.segye.com/newsView/20260918504507" target="_blank" rel="noopener">세계일보</a>) — docSeq=59315가 이 중 하나인지는 미확인. 앞서 붙였던 '참석 필수·3명·신원조사'는 이 공고가 아니라 2025년 다른 설명회 전례였으며, 이 건에 적용된다는 근거 없음.</p>
@@ -586,7 +601,7 @@ footer b{color:var(--ink-2)}
       <div class="bd-head"><span class="bdg observe">OBSERVE</span><h4>방사청 공격드론 탄약표준화·인증제도 구축</h4><span class="bd-when">개찰 10.8 <span class="dcount" data-due="2026-10-08"></span></span></div>
       <p class="bd-why">인증제도 설계 단계 — 절차에 '출하검사·상태점검' 항목 반영 시 검사장비가 제도적 필수재가 됨</p>
       <p class="bd-act">의견 제출 경로 확인, 인증 절차 초안 공개 시 즉시 검토</p>
-      <div class="bd-src">나라장터 자동수집(9월) — 개찰 10.8 종료, 수행사 확인 대기</div>
+      <div class="bd-src">나라장터 등록공고 2026MHD006434799(방위사업청 운영지원과, 게시 2026-08-28, 용역) — 개찰 10.8 종료, 수행사 확인 대기 · <a href="https://www.g2b.go.kr/link/PNPE001_01" target="_blank" rel="noopener">나라장터 목록에서 검색</a></div>
     </div>
     <div class="bd-card c-nobid">
       <div class="bd-head"><span class="bdg nobid">NO BID</span><h4>드론 AI 소방 상황인지 기술개발 (소방청)</h4><span class="bd-when">개찰 9.17 <span class="dcount" data-due="2026-09-17"></span></span></div>
@@ -1328,7 +1343,7 @@ const CURATED={
     if(!end){ const m=String(i.note||"").match(/(개찰|마감)\s*(20\d\d[.\-]\d{1,2}[.\-]\d{1,2})/); if(m){end=toDate(m[2]);label=m[1];} }
     if(!end) return;
     const d=Math.round((end-t0)/864e5); i.dday=d;
-    const tag=d<0?"마감":d===0?"오늘 마감":"D-"+d;
+    const tag=d<0?"종료":d===0?"오늘 마감":"D-"+d;
     const ymd=`${end.getFullYear()}.${String(end.getMonth()+1).padStart(2,"0")}.${String(end.getDate()).padStart(2,"0")}`;
     i.nm=String(i.nm||"").replace(/\s*\((개찰|마감|오늘|D-)[^)]*\)\s*$/,"")+` (${label} ${ymd} · ${tag})`;
   };
@@ -1338,6 +1353,31 @@ const CURATED={
     (typeof CLOUD!=="undefined"?CLOUD.items||[]:[]).forEach(fix);
     Object.values(AUTO.gov||{}).forEach(l=>(l||[]).forEach(fix));
   }catch(e){ console.error("dday recalc",e); }
+})();
+/* ---------- 🛰·🔎 표 자동 행: 전수수집(AUTO)·검색수집(CLOUD)에서 드론·로봇 건을 추출해 표에 덧붙인다 ---------- */
+(function(){
+  const esc=s=>String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  const stat=i=>{const d=i.dday; if(d===null||d===undefined) return "마감 미상 · 원문 확인"; const m=String(i.nm).match(/(개찰|마감)\s*(\d{4}\.\d{2}\.\d{2})/); const lab=m?`${m[1]} ${m[2].replace(/\./g,"-")}`:"";
+    return d<0?`${lab} 종료 · 낙찰사 추적`:d===0?`${lab} · 오늘`:`${lab} · D-${d}`;};
+  const link=i=>i.url?`<a href="${esc(i.url)}" target="_blank" rel="noopener">${/PNPE001_01|notice_list|AnnounceList/.test(i.url)?"목록에서 검색":"공고 확인"}</a>${i.no?` <span class="mono" style="font-size:11px;color:var(--ink-3)">${esc(i.no)}</span>`:""}`:`<span style="color:var(--ink-3)">조회</span>`;
+  const title=i=>esc(String(i.nm).replace(/\s*\((개찰|마감|오늘|D-)[^)]*\)\s*$/,""));
+  const money=i=>{const m=String(i.note||"").match(/예산\s*([\d.,]+(?:억|만원))/); return m?m[1]:"—";};
+  const org=i=>esc(String(i.src||"").split(" · ")[0]);
+  const all=[...(AUTO.feed||[]),...((typeof CLOUD!=="undefined"&&CLOUD.items)||[])];
+  const seen=new Set();
+  const uniq=all.filter(i=>{if(/\(이관\)|2019년도|번역 감수/.test(i.nm||"")) return false; const k=i.url+"|"+i.nm; if(seen.has(k)) return false; seen.add(k); return true;});
+  const kwBuy=/드론|무인기|무인항공|안티드론|대드론|멀티콥터|UAM|버티포트/, kwRobot=/로봇|휴머노이드|액추에이터/;
+  const isBuy=i=>/물품|임차|구매|구입/.test(i.note||"")||/구매|구입|임차/.test(i.nm||"");
+  const isPre=i=>/용역|R&D|연구|기획|실증|행정예고|입법예고|사전규격|설명회/.test((i.note||"")+(i.nm||""));
+  const buy=uniq.filter(i=>kwBuy.test(i.nm+(i.note||""))&&isBuy(i)&&!/전자담배/.test(i.nm));
+  const pre=uniq.filter(i=>(kwBuy.test(i.nm)||kwRobot.test(i.nm))&&!isBuy(i)&&isPre(i)&&!/전자담배/.test(i.nm));
+  const byDate=(a,b)=>(b.d||"").localeCompare(a.d||"");
+  const tb=document.getElementById("droneBuyTbody");
+  if(tb&&buy.length){ tb.insertAdjacentHTML("beforeend",`<tr><td colspan="5" style="background:var(--bg-2);color:var(--ink-3);font-size:11.5px">⚙ 아래는 전수 자동수집(${AUTO.checked})·☁ 검색수집에서 자동 추출한 드론·무인기 구매/임차 건 ${buy.length}건 — 상태는 열람 시점 재계산</td></tr>`+
+    buy.sort(byDate).map(i=>`<tr><td>${org(i)}</td><td>${title(i)}</td><td>${money(i)}</td><td>${stat(i)}</td><td>${link(i)}</td></tr>`).join("")); }
+  const tp=document.getElementById("preSignalTbody");
+  if(tp&&pre.length){ tp.insertAdjacentHTML("beforeend",`<tr><td colspan="5" style="background:var(--bg-2);color:var(--ink-3);font-size:11.5px">⚙ 아래는 전수 자동수집·☁ 검색수집에서 자동 추출한 드론·로봇 용역/연구/예고 건 ${pre.length}건</td></tr>`+
+    pre.sort(byDate).map(i=>{const k=/행정예고|입법예고/.test(i.nm+(i.note||""))?"입법·행정예고":/R&D|연구|기획/.test(i.nm+(i.note||""))?"연구·R&D":/실증/.test(i.nm)?"지자체 과제":"용역"; return `<tr><td>${k}</td><td>${title(i)}</td><td>${org(i)}</td><td>${stat(i)}</td><td>${link(i)}</td></tr>`;}).join("")); }
 })();
 /* ---------- PINNED: 섹션별 '지금 볼 것' 핵심 N건 ----------
    순위 = 위플로 연관도(별점) 우선, 같으면 마감 임박순. 제목 클릭 시 원문으로 이동한다. */
@@ -1397,11 +1437,11 @@ const CURATED={
   const soon=feedLive.filter(f=>f.dday!==null&&f.dday!==undefined&&f.dday<=7).length;
   st.innerHTML=`
     <div class="mcard"><span class="mk2">개찰 예정 관심 공고</span>
-      <span class="mv ${na?'yes':'no'}"><span class="pulse ${na?'yes':'no'}"></span>${na?`${na}건 · 7일 내 ${soon}건`:'없음'}${feedPast?` · <span style="color:var(--ink-3);font-weight:500">마감 지난 ${feedPast}건 숨김</span>`:''}</span>
-      <span class="md2">전수 ${AUTO.total}건 중 A등급 ${AUTO.counts.A}건 자동 선별</span></div>
+      <span class="mv ${na?'yes':'no'}"><span class="pulse ${na?'yes':'no'}"></span>${na?`${na}건 · 7일 내 ${soon}건`:'없음'}</span>
+      <span class="md2">전수 ${AUTO.total}건 중 A등급 ${AUTO.counts.A}건 선별${feedPast?` · 마감 지난 ${feedPast}건 숨김`:''}</span></div>
     <div class="mcard"><span class="mk2">마지막 수집</span>
       <span class="mv"><span class="mono">${AUTO.checked}</span></span>
-      ${(()=>{try{const h=(Date.now()-new Date(AUTO.checked.replace(" ","T")+":00+09:00").getTime())/3.6e6;return h>48?`<span class="md2" style="color:var(--crit);font-weight:700">⚠ 맥 전수수집 ${Math.floor(h/24)}일 경과</span><span class="md2">☁ 클라우드 검색수집으로 보완 중 — 마지막 ${CLOUD.checked} · ${CLOUD.items.length}건 (검색 기반, 전수 아님)</span>`:"";}catch(e){return "";}})()}
+      ${(()=>{try{const h=(Date.now()-new Date(AUTO.checked.replace(" ","T")+":00+09:00").getTime())/3.6e6;return h>48?`<span class="md2"><b style="color:var(--crit)">⚠ 전수수집 ${Math.floor(h/24)}일 경과</b> · ☁ 검색수집 ${CLOUD.checked.slice(5)} (${CLOUD.items.length}건, 전수 아님)</span>`:"";}catch(e){return "";}})()}
       <span class="md2">자동 11채널: 나라장터·D2B·KIAST·KRIT·드론포털·KIP·IRIS·IITP·기업마당·KIPA·DTAQ</span></div>
     <div class="mcard"><span class="mk2">채널 커버리지</span>
       <span class="mv"><span class="mono">${COVERAGE.filter(c=>c.st==='auto').length}</span> 자동 · <span class="mono">${COVERAGE.filter(c=>c.st!=='auto').length}</span> 큐레이션</span>
@@ -1418,11 +1458,18 @@ const CURATED={
         ${i.url?`<a href="${i.url}" target="_blank" rel="noopener" style="font-size:12px">${linkLabel(i.url)}</a>`:''}</div>
       <span class="mdt ${rec?'recent':''}">${i.d}</span>
     </div>`;};
-  const cloudItems=(CLOUD.items||[]).slice().sort((x,y)=>((x.dday===undefined||x.dday<0)?1:0)-((y.dday===undefined||y.dday<0)?1:0)||(y.d||"").localeCompare(x.d||""));
-  const cloudHtml=cloudItems.length?`<div class="mempty" style="color:var(--accent-ink)">☁ 클라우드 검색수집 ${CLOUD.checked} — 라운드가 WebSearch로 찾은 ${cloudItems.length}건 (전수 아님 · 링크 필수)</div>`+cloudItems.map(i=>mk({...i,tag:"☁ "+i.tag})).join(""):"";
-  document.getElementById("mfeedAuto").innerHTML = cloudHtml + (na ? feedLive.map(mk).join("")
-    : `<div class="mempty">개찰 예정인 관심(A등급) 공고가 없습니다 — 다음 수집에서 자동 갱신됩니다.</div>`)
-    + (feedPast?`<div class="mempty">개찰·마감이 지난 ${feedPast}건은 숨김 — 마지막 수집 ${AUTO.checked} 기준 데이터라 열람 시점(오늘)으로 다시 계산했다. 자동수집 재가동 시 갱신.</div>`:"");
+  const fold=(title,items,open)=>items.length?`<details class="fold"${open?" open":""}><summary>${title} <span class="mono">${items.length}건</span></summary>${items.map(mk).join("")}</details>`:"";
+  const isPast=i=>i.dday!==undefined&&i.dday!==null&&i.dday<0;
+  const cl=(CLOUD.items||[]).map(i=>({...i,tag:"☁ "+i.tag})).sort((x,y)=>(y.d||"").localeCompare(x.d||""));
+  const clLive=cl.filter(i=>!isPast(i)), clPast=cl.filter(isPast);
+  const fSoon=feedLive.filter(i=>i.dday!==undefined&&i.dday!==null&&i.dday<=7), fRest=feedLive.filter(i=>!(i.dday!==undefined&&i.dday!==null&&i.dday<=7));
+  document.getElementById("mfeedAuto").innerHTML =
+    `<div class="fhead">☁ 클라우드 검색수집 <span class="mono">${CLOUD.checked}</span> · 라운드가 검색으로 찾은 공고 (전수 아님)</div>`
+    + (clLive.length?clLive.map(mk).join(""):`<div class="mempty">진행 중인 검색수집 공고 없음</div>`)
+    + fold("종료된 검색수집 공고 (낙찰사 추적)",clPast,false)
+    + `<div class="fhead" style="margin-top:14px">⚙ 전수 자동수집 <span class="mono">${AUTO.checked}</span> · 나라장터·D2B 등 11채널${feedPast?` · 마감 ${feedPast}건 숨김`:""}</div>`
+    + (na ? fSoon.map(mk).join("") + fold("7일 이후 마감 공고",fRest,false)
+         : `<div class="mempty">개찰 예정인 관심(A등급) 공고가 없습니다 — 다음 수집에서 자동 갱신됩니다.</div>`);
 
   /* --- 상단 고정: 지금 해야 할 것 (공고 + 공모전 통합) --- */
   // 상단 배너는 '마감이 걸린 것'만 — 연관도만 높고 기한 없는 건은 아래 섹션에서 본다
@@ -2004,7 +2051,7 @@ const GOV=[
     const all=(AUTO.gov||{})[k]||[];
     const list=all.filter(isLive);
     if(k==="top") return "";
-    if(!list.length) return `<dt>현재 과제</dt><dd style="color:var(--ink-3)">접수·개찰 진행 중인 수집 공고 없음${all.length?` — 마감 지난 ${all.length}건은 아래 '과거 공고'로 이동`:""} (마지막 전수수집 ${AUTO.checked})</dd>`;
+    if(!list.length) return `<dt>현재 과제</dt><dd style="color:var(--ink-3)">진행 중 공고 없음${all.length?` — 마감된 ${all.length}건은 아래 '과거 공고'에`:""} · 수집 ${AUTO.checked.slice(0,10)}</dd>`;
     return `<dt>현재 과제<br><span style="font-weight:400">(${list.length}건)</span></dt><dd><div style="display:flex;flex-direction:column;gap:7px">${list.map(g=>`
       <div style="line-height:1.45">${isNew(g.d)?'<span class="newpill">NEW</span>':''}<a href="${g.url}" target="_blank" rel="noopener" style="font-weight:600">${g.nm}</a>
       <span style="font-family:var(--mono);font-size:11px;color:var(--ink-3);white-space:nowrap"> · ${g.org} · ${g.d||""}${g.dday!==null&&g.dday!==undefined?` · <b style="color:${g.dday<0?'var(--ink-3)':g.dday<=7?'var(--crit)':'var(--ink-2)'}">${g.dday<0?"마감":"D-"+g.dday}</b>`:""} · <span class="mstars" style="font-size:10.5px">${"★".repeat(g.star)}<span class="off">${"★".repeat(5-g.star)}</span></span></span></div>`).join("")}</div></dd>`;
