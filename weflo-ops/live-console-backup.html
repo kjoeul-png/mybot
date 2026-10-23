@@ -1647,7 +1647,8 @@ const CURATED={
 
   /* --- 부처별 감시판: 신호 있는 곳 우선 --- */
   const maxU=Math.max(...ag.map(a=>a.drone.units));
-  const scored=ag.map(a=>({...a, live:(a.sigCount||{}).live||0,
+  const t0g=new Date(); t0g.setHours(0,0,0,0);
+  const scored=ag.map(a=>({...a, live:(a.sig||[]).filter(s=>s.end&&new Date(s.end+"T00:00:00")>=t0g).length,
     hasNews:(W.items||[]).some(n=>n.agency===a.nm)}))
     .sort((x,y)=>(y.live>0)-(x.live>0)||(y.hasNews)-(x.hasNews)||y.drone.units-x.drone.units);
   const yrs=["'26","'27","'28","'29","'30"];
@@ -1997,16 +1998,22 @@ const GOV=[
 (function(){
   const t0=new Date(); t0.setHours(0,0,0,0);
   const isNew=d=>d&&(Date.now()-new Date(d+"T00:00:00"))/864e5<=7;
+  // 수집 시점(AUTO.checked)의 '현재/과거' 구분은 신뢰하지 않는다 — 열람 시점 dday(재계산)로 다시 나눈다
+  const isLive=g=>g.dday===null||g.dday===undefined||g.dday>=0;
   const govList=k=>{
-    const list=(AUTO.gov||{})[k]||[];
+    const all=(AUTO.gov||{})[k]||[];
+    const list=all.filter(isLive);
     if(k==="top") return "";
-    if(!list.length) return `<dt>현재 과제</dt><dd style="color:var(--ink-3)">접수·개찰 진행 중인 수집 공고 없음 — 매일 자동 갱신</dd>`;
+    if(!list.length) return `<dt>현재 과제</dt><dd style="color:var(--ink-3)">접수·개찰 진행 중인 수집 공고 없음${all.length?` — 마감 지난 ${all.length}건은 아래 '과거 공고'로 이동`:""} (마지막 전수수집 ${AUTO.checked})</dd>`;
     return `<dt>현재 과제<br><span style="font-weight:400">(${list.length}건)</span></dt><dd><div style="display:flex;flex-direction:column;gap:7px">${list.map(g=>`
       <div style="line-height:1.45">${isNew(g.d)?'<span class="newpill">NEW</span>':''}<a href="${g.url}" target="_blank" rel="noopener" style="font-weight:600">${g.nm}</a>
       <span style="font-family:var(--mono);font-size:11px;color:var(--ink-3);white-space:nowrap"> · ${g.org} · ${g.d||""}${g.dday!==null&&g.dday!==undefined?` · <b style="color:${g.dday<0?'var(--ink-3)':g.dday<=7?'var(--crit)':'var(--ink-2)'}">${g.dday<0?"마감":"D-"+g.dday}</b>`:""} · <span class="mstars" style="font-size:10.5px">${"★".repeat(g.star)}<span class="off">${"★".repeat(5-g.star)}</span></span></span></div>`).join("")}</div></dd>`;
   };
   const govPast=k=>{
-    const list=(AUTO.govPast||{})[k]||[];
+    const expired=((AUTO.gov||{})[k]||[]).filter(g=>!isLive(g));
+    const past=(AUTO.govPast||{})[k]||[];
+    const seen=new Set(expired.map(g=>g.url));
+    const list=[...expired,...past.filter(g=>!seen.has(g.url))];
     if(k==="top"||!list.length) return "";
     return `<dt style="opacity:.75">과거 공고<br><span style="font-weight:400">(${list.length}건)</span></dt><dd>
       <details><summary style="cursor:pointer;font-size:12px;color:var(--ink-3);list-style:none">▸ 마감된 공고 펼치기 — 이 우산에서 어떤 과제가 나왔는지 패턴 참고</summary>
