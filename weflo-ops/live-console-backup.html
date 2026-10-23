@@ -269,13 +269,14 @@ section.panel.on{display:block}
 .pin{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);
   border-radius:var(--radius);padding:12px 16px 11px;box-shadow:var(--shadow);margin:0 0 16px}
 .pin.hero{border-left-color:var(--amber);border-left-width:4px;padding:15px 18px 14px;margin-top:16px}
-.pin .ph{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.pin .ph{display:flex;align-items:center;gap:9px;margin-bottom:8px;flex-wrap:wrap}
+.pin .ph h4{flex:1 1 220px;min-width:0;white-space:nowrap}
 .pin .ph h4{font-size:13px}
 .pin.hero .ph h4{font-size:14.5px}
 .pin .ph .kk{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
   color:var(--accent-ink);font-weight:700}
 .pin.hero .ph .kk{color:var(--amber)}
-.pin .ph .cnt{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-left:auto;white-space:nowrap}
+.pin .ph .cnt{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-left:auto;white-space:normal;text-align:right;flex:0 1 auto;max-width:100%}
 .pin ol{margin:0;padding:0;list-style:none}
 .pin li{display:grid;grid-template-columns:16px 1fr auto;gap:10px;align-items:baseline;
   padding:7px 0;border-top:1px solid var(--line)}
@@ -423,11 +424,11 @@ details.fold>summary .mono{color:var(--ink-2);font-weight:700}
 
     <div id="pinTop"></div>
     <div class="pin hero" id="dailyInsight" style="margin-top:16px">
-      <div class="ph"><span class="kk">Daily Insight</span><h4>오늘의 인사이트 — 단순 나열이 아닌 판단</h4><span class="cnt">2026-10-23 (금) 갱신 · 매일 06:50·13:10 자동 갱신 (콘솔+이메일+텔레그램 동시 전달) · 10.23 전수 점검(날짜·링크) 반영</span></div>
+      <div class="ph"><span class="kk">Daily Insight</span><h4>오늘의 인사이트 — 단순 나열이 아닌 판단</h4><span class="cnt">2026-10-23 (금) 갱신 · 매일 06:50·13:10 자동 (콘솔·이메일·텔레그램)</span></div>
       <ol>
         <li><span class="rk">★</span><div><span class="pt" style="font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4">조달청 137건 집행 종반 + 10.23(금) W43 마지막 영업일 — 주말 전 g2b '드론' 확인이 권장되는 날</span><div class="why">무엇이 바뀌었나 — 집행 기간(10.19~30) 후반, 10.23(금)이 W43 마지막 영업일이다. 공개 웹·집계사이트엔 10월 신규 드론 공고가 여전히 안 올라온다(나라장터 색인 지연 + 본 환경 g2b 차단). 10.26(월)은 WK 주간브리핑(W44) 재작성일. 10.22 신설한 '정부·지자체 드론 공고 섹터'도 공개 출처 확인분만 담겨 있어, 전수가 되려면 g2b 직접 열람분이 필요하다. 왜 중요한가 — 집행 기간 중 매일 드론·로봇·배터리 건이 풀릴 수 있는데, 공개 검색만으론 놓친다 — 전수 커버리지의 병목이 'g2b 접근'에 걸려 있다. 지금 할 행동 — ① 운영자가 g2b에서 '드론'·'무인기' 검색(공고일 10.19~) 결과 링크를 콘솔에 공유하면 드론 섹터에 즉시 반영 ② 맥 자동수집(9.29부터 정지) 재가동이 근본 해결 — ~/Weflo run_all.sh.</div></div><span class="rt2"></span></li>
         <li><span class="rk">1</span><div><span class="pt" style="font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4">로봇 부품주 — 로보티즈 중국 판매 확대 보도, 에스피지·삼현 '정식 수주 공시'는 아직 대기(11월 중순 3Q 분기보고서가 분수령)</span><div class="why">무엇이 바뀌었나 — 로보티즈가 액추에이터(다이나믹셀) 앞세워 중국 판매를 확대 중이라는 보도(9.22), 에스피지·삼현은 '북미 정식 수주 공시'가 아직 안 나와 11월 중순 3Q 분기보고서(법정기한 11.16 월 — 종전 표기 11.14는 토요일이라 정정)가 분수령이라는 증권가 시각이 유지된다. 10월 신규 공시는 없음(DART 기준 미확인). 왜 중요한가 — 국산 액추에이터·감속기의 '양산 수주'가 공시로 확정되는 시점이 EOL 검사 수요의 방아쇠 — 그 전에 접점을 만들어야 선점이 된다. 지금 할 행동 — 삼현 미팅 요청 10.23(금)까지 발송(미발송 시 10.26(월) 즉시)(양산 라인 EOL 검사 포함 여부). DART '단일판매·공급계약' 알림을 삼현·에스피지·로보티즈로 설정해 공시 즉시 포착.</div></div><span class="rt2"></span></li>
-        <li><span class="rk">2</span><div><span class="pt" style="font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4">콘솔 신뢰성 기준 재정비 완료 — 모든 항목 '출처 링크 필수', 미확인은 '확인 요청'으로 분리</span><div class="why">무엇이 바뀌었나 — 10.22 콘솔을 출처·링크 기준으로 전면 정비했다: 진행중 사업 전 항목에 클릭 링크, 미검증이던 docSeq=59315는 '검증 필요'로 강등, 공개 링크 없는 건(공군 통합관리체계 등)은 '확인 요청'으로 분리. 왜 중요한가 — 제안서·이사진 보고에 콘솔을 그대로 인용하려면 '모든 수치·공고에 확인 가능한 출처'가 전제다 — 상상·추정이 섞이면 전체 신뢰가 무너진다. 지금 할 행동 — 콘솔을 볼 때 출처 링크를 클릭해 원문 확인하는 습관. 미심쩍은 항목은 '이거 출처?'로 지적하면 당일 추적·정정. docSeq=59315 원문을 운영자가 확인해 판정. <b>10.23 전수 점검 결과</b> — 자동수집 피드·공모전의 D-day가 9.29 수집값 그대로 표시되던 오류(9.30 마감 건이 'D-1'로 잔존)를 열람 시점 재계산으로 교정, 해안정찰 VTOL 카드의 출처 연도(Janes 2021-09·뉴스레터 2025-03) 명시 및 '확인 요청' 이관, 교육용 드론 낙찰사명 '에이디시스템'으로 정정(머니투데이·헬로티 링크 추가). 링크 233개는 본 환경 차단으로 직접 열지 못해 검색 색인으로 존재만 교차확인 — 미확인 2건(경찰청 안티드론 차량·VTOL 2026 공고)은 확인 요청에 등재. <b>2차 점검(전 탭 사실검증, 10.23 오후)</b> — 11.14(토)로 적혀 있던 에스피지 3Q를 '11월 중순(법정기한 11.16)'으로, EPC 성능인증 발주처를 산업부·KTL→중기부·유통원으로, KIP '우수조달물품'→'우수상용품'으로, 드론센터 건을 D2B 긴급공고→국방부 연구용역으로, UWC 엑스포 7.22→8.25~27로, 드론특별자유화구역 3차를 2025년 지정으로, 삼현 양산 시점을 '26.12 초도 출하로, 혁신 프리미어 1000 주관을 관계부처 합동으로 정정. 11.2 창설의 10.13 국무회의 의결은 커뮤니티 출처뿐이라 '공식 보도 재확인' 표기. <b>자동수집 복구(10.23 저녁)</b> — 맥 전수수집은 맥북에서만 돌고 발행 세션이 9.16 끊겨 멈춘 것으로 확인. 클라우드는 수집 호스트가 차단돼 대신 돌릴 수 없어, 라운드마다 WebSearch로 찾은 공고를 '☁ 클라우드 검색수집'으로 00 피드에 쌓는다(전수 아님, 링크 필수). 오늘 5건 반영(충북대 휴머노이드 플랫폼 구매·동해항 안티드론 설계용역·국립소방연구원 드론 AI 용역 실재 확인 등). <b>전수수집 데이터 재검토 성과</b> — 9.29 수집분에 묻혀 있던 <b>해안정찰용무인항공기 2026 공고(방사청, 개찰 10.30, 2026EU100011001)</b>와 <b>ADD 무인기 임무모듈 시험 검증 장비(5.5억, 개찰 10.23)</b>를 찾아 ★5 보드·BD 보드에 올렸고, 🛰·🔎 표는 수집 데이터에서 드론·로봇 건을 자동 추출해 덧붙이도록 바꿨다(누락 방지).</div></div><span class="rt2"></span></li>
+        <li><span class="rk">2</span><div><span class="pt" style="font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.4">콘솔 신뢰성 기준 재정비 완료 — 모든 항목 '출처 링크 필수', 미확인은 '확인 요청'으로 분리</span><div class="why">무엇이 바뀌었나 — 10.22~23 이틀간 콘솔 전수 점검: 모든 항목에 출처 링크, 미확인 건은 '확인 요청'으로 분리, 사실오류 13건 정정(에스피지 3Q '11.14'→11월 중순, EPC 발주처, 국방드론본부 11.2 창설 등), 자동수집 D-day를 열람 시점으로 재계산. 왜 중요한가 — 제안서·이사진 보고에 콘솔을 그대로 인용하려면 '모든 수치·공고에 확인 가능한 출처'가 전제다. 지금 할 행동 — 점검 중 수집 데이터에서 찾은 <b>해안정찰용무인항공기 2026 공고(방사청, 개찰 10.30)</b>·<b>ADD 무인기 임무모듈 시험 검증 장비(5.5억, 개찰 10.23)</b> 낙찰사 추적. 상세 정정 이력은 GitHub 브리핑(daily-briefing.md) 참조.</div></div><span class="rt2"></span></li>
       </ol>
     </div>
 
