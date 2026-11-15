@@ -1,6 +1,6 @@
 # 위플로 BD 브리핑 — 2026-11-16 (월) 08:00 기준 (11.15 라운드 포함)
 
-콘솔: https://claude.ai/artifact/JpMBNBvzjvtPj3QKLZ9hrZ (게시본은 11.11 06:52 기준 v98 — 11.15·11.16 갱신본은 준비 중, 발행 승인 대기)
+콘솔: https://claude.ai/artifact/JpMBNBvzjvtPj3QKLZ9hrZ (게시본은 11.11 06:52 기준 v98 — 11.16 갱신본(WK W47 포함)은 weflo-ops/console-pending.html에 준비 완료, 발행 승인 대기)
 
 ## 수집 상태
 - 맥 전수수집 JSON 푸시 없음(콘솔 자동수집은 9.29분 1,144건 고정).
