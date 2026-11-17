@@ -1,6 +1,6 @@
 # 위플로 BD 브리핑 — 2026-11-17 (화) 14:00 기준 (아침 08:00 라운드 포함)
 
-콘솔: https://claude.ai/artifact/JpMBNBvzjvtPj3QKLZ9hrZ (게시본은 11.11 06:52 기준 v98 — 11.17 갱신본(WK W47 포함)은 weflo-ops/console-pending.html에 준비 완료, 발행 승인 대기)
+콘솔: https://claude.ai/artifact/JpMBNBvzjvtPj3QKLZ9hrZ (11.17 13:1x 발행 완료 — 11.17 갱신본(WK W47 포함, 11.10~17 통합) 게시, 서버 Version 97)
 
 ## [오전 대비 변동]
 - 오전 대비 변동 없음. 노션 일일 브리핑 최신은 여전히 11.5자(11.6~11.17자 미생성), 맥 JSON 푸시 없음.
