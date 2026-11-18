@@ -1,6 +1,6 @@
 # 위플로 BD 브리핑 — 2026-11-19 (목) 08:00 기준 (11.18 라운드 포함)
 
-콘솔: https://claude.ai/artifact/JpMBNBvzjvtPj3QKLZ9hrZ (11.18 13:1x 발행본 게시 중 — 11.19 갱신분은 이 라운드에서 발행 예정)
+콘솔: https://claude.ai/artifact/JpMBNBvzjvtPj3QKLZ9hrZ (11.19 06:5x 발행 완료 — 11.19 갱신본(오늘 개찰 반영) 게시, 서버 Version 99)
 
 ## 수집 상태
 - 맥 전수수집 JSON 푸시 없음(콘솔 자동수집은 9.29분 1,144건 고정).
